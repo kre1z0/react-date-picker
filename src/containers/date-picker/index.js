@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import MaskedInput from 'react-text-mask';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment/locale/ru';
@@ -151,7 +152,7 @@ class DatePicker extends Component {
         const enter = e.which === 13;
 
         if (esc || enter) {
-            this.input.blur();
+            this.input.inputElement.blur();
             console.info('--> _onKeyDown');
         }
     };
@@ -161,12 +162,13 @@ class DatePicker extends Component {
     };
 
     _onRef = input => {
+        console.info('--> _onRef', input);
         const { focus } = this.props;
 
         if (input) this.input = input;
 
         if (focus && input) {
-            input.focus();
+            input.inputElement.focus();
         }
     };
 
@@ -194,51 +196,140 @@ class DatePicker extends Component {
         });
     };
 
-    onChangeInput = e => {
-        let val = e.target.value;
+    _maskingValue = value => {
+        const { withTime } = this.props;
+        const length = value.length;
+        const maxLength = withTime ? 19 : 10;
+        const lastIndex = value.length - 1;
+        const lastChar = value.charAt(lastIndex);
 
+        if (
+            (length === 2 && value.charAt(3) !== '.') ||
+            (length === 5 && value.charAt(6) !== '.')
+        ) {
+            value += '.';
+        } else if (
+            (length === 3 && value.charAt(3) === '') ||
+            (length === 6 && value.charAt(6) === '')
+        ) {
+            value = value.substring(0, lastIndex) + '.' + lastChar;
+        }
+
+        if (withTime) {
+            if (length === 10) {
+                value += ' ';
+            } else if (length === 11 && value.charAt(11) === '') {
+                value = value.substring(0, lastIndex) + ' ' + lastChar;
+            } else if (
+                (length === 13 && value.charAt(13) !== ':') ||
+                (length === 16 && value.charAt(16) !== ':')
+            ) {
+                value += ':';
+            } else if (
+                (length === 14 && value.charAt(14) === '') ||
+                (length === 17 && value.charAt(17) === '')
+            ) {
+                value = value.substring(0, lastIndex) + ':' + lastChar;
+            }
+        }
+
+        return value;
+    };
+
+    _getDifference = (a, b) => {
+        var i = 0;
+        var j = 0;
+        var result = '';
+
+        while (j < b.length) {
+            if (a[i] !== b[j] || i === a.length) result += b[j];
+            else i++;
+            j++;
+        }
+        return result;
+    };
+
+    onChangeInput = e => {
         const { inputValue } = this.state;
         const { onChange, withTime, value } = this.props;
 
-        const formattedDate = this._getFormattedDate(value);
+        let val = e.target.value;
+        console.info('--> val', val);
+        const selectionStart = e.target.selectionStart;
+        const maxLength = withTime ? 19 : 10;
+        // const removalValue = this._getDifference(val, inputValue);
+        // const regExp = /([:. ])/g;
+        // const isMark = regExp.test(removalValue);
+        // const valueWithoutMarks = val.replace(regExp, '');
 
-        const { 0: day, 1: month, 2: year } = this._dateFormatting(
-            value,
-            false,
-        ).split('.');
+        // if (
+        //     !this._isNumeric(valueWithoutMarks) &&
+        //     Number(valueWithoutMarks) !== 0
+        // )
+        //     return;
+        // const removal = val.length < inputValue.length;
 
-        if (withTime) {
-            const { 0: hours, 1: minutes, 2: seconds } = this._dateFormatting(
-                value,
-                'time',
-            ).split(':');
-        }
+        // if (val.length > maxLength && !removal) return;
+        //
+        // if (!removal) val = this._maskingValue(val);
 
-        const length = val.length;
-
-        if (
-            (length === 2 && val.charAt(2) !== '.') ||
-            (length === 5 && val.charAt(5) !== '.')
-        ) {
-            val += '.';
-        }
+        // if (val.length >= maxLength && !removal)
+        //     val = val.slice(0, val.length - 1);
 
         this.setState({
             inputValue: val,
         });
     };
 
-    render() {
-        const {
-            onlyCurrentMonthDay,
-            weekOffset,
-            value,
-            onChange,
-            withTime,
-        } = this.props;
-        const { date, inputValue, time } = this.state;
+    getMask = () => {
+        const { withTime } = this.props;
+        if (withTime) {
+            return [
+                /[0-9]/,
+                /[0-9]/,
+                '.',
+                /[0-9]/,
+                /[0-9]/,
+                '.',
+                /[0-9]/,
+                /[0-9]/,
+                /[0-9]/,
+                /[0-9]/,
+                ' ',
+                /[0-9]/,
+                /[0-9]/,
+                ':',
+                /[0-9]/,
+                /[0-9]/,
+                ':',
+                /[0-9]/,
+                /[0-9]/,
+            ];
+        } else {
+            return [
+                /[0-9]/,
+                /[0-9]/,
+                '.',
+                /[0-9]/,
+                /[0-9]/,
+                '.',
+                /[0-9]/,
+                /[0-9]/,
+                /[0-9]/,
+                /[0-9]/,
+            ];
+        }
+    };
 
-        const maxLength = withTime ? 18 : 10;
+    getPlaceHolder = () => {
+        const { withTime } = this.props;
+        if (withTime) return '27.12.1988 22:22:22';
+        else return '27.12.1988';
+    };
+
+    render() {
+        const { onlyCurrentMonthDay, weekOffset, value, withTime } = this.props;
+        const { date, inputValue, time } = this.state;
 
         return (
             <div>
@@ -261,14 +352,16 @@ class DatePicker extends Component {
                             onChange={this.onChangeNumberInput}
                         />}
                 </div>
-                <input
+                <MaskedInput
                     ref={input => this._onRef(input)}
-                    onBlur={this._onBlur}
-                    onKeyDown={this._onKeyDown}
-                    maxLength={maxLength}
                     value={inputValue}
+                    mask={this.getMask()}
+                    className="date-picker-control"
+                    keepCharPositions={true}
+                    placeholder={this.getPlaceHolder()}
+                    onKeyDown={this._onKeyDown}
+                    onBlur={this._onBlur}
                     onChange={this.onChangeInput}
-                    type="text"
                 />
             </div>
         );

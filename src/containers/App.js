@@ -5,7 +5,7 @@ import moment from 'moment/moment';
 
 class App extends Component {
     state = {
-        date: '2018-05-04T14:04:44+03:00',
+        date: '2018-05-04T14:04:04+03:00',
     };
 
     onPickDate = date => {
