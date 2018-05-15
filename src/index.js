@@ -4,9 +4,6 @@ import { AppContainer } from 'react-hot-loader';
 
 import Root from './Root';
 
-import injectTapEventPlugin from 'react-tap-event-plugin';
-
-import moment from 'moment';
 import numeral from 'numeral';
 
 import 'numeral/locales/ru';

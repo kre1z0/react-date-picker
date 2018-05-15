@@ -1,5 +1,4 @@
 import React from 'react';
-import cn from 'classnames';
 
 export const Header = ({ items }) => {
     return (
@@ -8,7 +7,7 @@ export const Header = ({ items }) => {
                 return (
                     <div
                         key={`${item}-${i}`}
-                        className="item"
+                        className="weekday"
                         style={{
                             width: `calc(100% / ${items.length}`,
                         }}

@@ -9,11 +9,7 @@ class App extends Component {
     };
 
     onPickDate = date => {
-        // console.info(
-        //     '--> date.isValid()',
-        //     moment('2018-05-04T14:04:44+03:00').isValid(),
-        // );
-        console.info('--> date', moment(date).format());
+        console.info('--> DATE  ggwp nore <--', moment(date).format());
         this.setState({
             date,
         });

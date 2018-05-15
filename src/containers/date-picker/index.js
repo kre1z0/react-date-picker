@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment/locale/ru';
 
+import { CalendarPortal } from '../../components/calendar/CalendarPortal';
 import { Control } from '../../components/calendar/Control';
 import { Calendar } from '../../components/calendar/Calendar';
 import { Time } from '../../components/calendar/Time';
@@ -34,6 +35,8 @@ class DatePicker extends Component {
         onlyCurrentMonthDay: PropTypes.bool,
         withTime: PropTypes.bool,
         focus: PropTypes.bool,
+        // only top and bottom
+        position: 'top',
     };
 
     static defaultProps = {
@@ -52,13 +55,17 @@ class DatePicker extends Component {
             m: 0,
             s: 0,
         },
+        offsetTop: 0,
+        offsetLeft: 0,
+        error: false,
     };
 
     componentDidMount() {
         const { value } = this.props;
         const { time } = this.state;
         moment.locale('ru');
-
+        window.addEventListener('resize', this._onResize);
+        this._onResize();
         this.setState({
             time: this._convertTimeToFilter(
                 moment(value) - moment(value).startOf('day'),
@@ -66,6 +73,10 @@ class DatePicker extends Component {
             ),
             inputValue: this._getFormattedDate(value),
         });
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this._onResize);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -76,6 +87,19 @@ class DatePicker extends Component {
             });
         }
     }
+
+    _onResize = () => {
+        const { offsetTop, offsetLeft } = this.state;
+        const container = this.container;
+        const top = container.offsetTop;
+        const left = container.offsetLeft;
+        if (offsetTop !== top || offsetLeft !== left) {
+            this.setState({
+                offsetTop: top,
+                offsetLeft: left,
+            });
+        }
+    };
 
     _convertTimeToFilter = (val, filters) => {
         const newFilters = {};
@@ -137,14 +161,25 @@ class DatePicker extends Component {
         });
     };
 
+    _dateIsValid = date => moment(date).isValid();
+
     onPickDate = date => {
         const { onChange, withTime } = this.props;
         const { time } = this.state;
 
-        if (withTime) {
-            onChange &&
-                onChange(moment(date) + this._convertFiltersToTime(time));
-        } else onChange && onChange(moment(date));
+        if (this._dateIsValid(date)) {
+            this.setState({
+                error: false,
+            });
+            if (withTime) {
+                onChange &&
+                    onChange(moment(date) + this._convertFiltersToTime(time));
+            } else onChange && onChange(moment(date));
+        } else {
+            this.setState({
+                error: true,
+            });
+        }
     };
 
     _onKeyDown = e => {
@@ -161,8 +196,7 @@ class DatePicker extends Component {
         console.info('--> _onBlur');
     };
 
-    _onRef = input => {
-        console.info('--> _onRef', input);
+    onRefInput = input => {
         const { focus } = this.props;
 
         if (input) this.input = input;
@@ -327,42 +361,75 @@ class DatePicker extends Component {
         else return '27.12.1988';
     };
 
+    onRefContainer = elem => {
+        if (elem) this.container = elem;
+    };
+
+    onRefDatePicker = elem => {
+        if (elem) this.datePicker = elem;
+    };
+
     render() {
         const { onlyCurrentMonthDay, weekOffset, value, withTime } = this.props;
-        const { date, inputValue, time } = this.state;
+        const {
+            date,
+            inputValue,
+            time,
+            error,
+            offsetTop,
+            offsetLeft,
+        } = this.state;
 
         return (
-            <div>
-                <div className="datePicker">
-                    <Control
-                        date={date}
-                        onPrev={this.handlePrevTime}
-                        onNext={this.handleNextTime}
-                    />
-                    <Calendar
-                        value={value}
-                        weekOffset={weekOffset}
-                        onlyCurrentMonthDay={onlyCurrentMonthDay}
-                        onChange={this.onPickDate}
-                        date={date}
-                    />
-                    {withTime &&
-                        <Time
-                            time={time}
-                            onChange={this.onChangeNumberInput}
-                        />}
-                </div>
+            <div
+                className="datePicker-container"
+                ref={input => this.onRefContainer(input)}
+            >
+                <CalendarPortal>
+                    <div
+                        ref={input => this.onRefDatePicker(input)}
+                        className="datePicker"
+                        style={{
+                            top: offsetTop,
+                            left: offsetLeft,
+                        }}
+                    >
+                        <Control
+                            date={date}
+                            onPrev={this.handlePrevTime}
+                            onNext={this.handleNextTime}
+                        />
+                        <Calendar
+                            value={value}
+                            weekOffset={weekOffset}
+                            onlyCurrentMonthDay={onlyCurrentMonthDay}
+                            onChange={this.onPickDate}
+                            date={date}
+                        />
+                        {withTime &&
+                            <Time
+                                time={time}
+                                onChange={this.onChangeNumberInput}
+                            />}
+                    </div>
+                </CalendarPortal>
                 <MaskedInput
-                    ref={input => this._onRef(input)}
+                    ref={input => this.onRefInput(input)}
                     value={inputValue}
                     mask={this.getMask()}
-                    className="date-picker-control"
+                    className={`${withTime
+                        ? 'date-picker-control withTime'
+                        : 'date-picker-control'} ${error ? 'error' : ''}`}
                     keepCharPositions={true}
                     placeholder={this.getPlaceHolder()}
                     onKeyDown={this._onKeyDown}
                     onBlur={this._onBlur}
                     onChange={this.onChangeInput}
                 />
+                {error &&
+                    <div className="datePicker-error">
+                        неверный формат даты
+                    </div>}
             </div>
         );
     }
