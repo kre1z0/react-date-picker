@@ -1,0 +1,49 @@
+@import "./colors.scss";
+
+:global {
+  html {
+    box-sizing: border-box;
+    font-family: FedraSans, 'sans-serif';
+    font-size: 14px;
+    background: $mainBackground;
+  }
+
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+
+  *:focus {
+    outline: none;
+  }
+
+  html,
+  body,
+  #root,
+  .app-container {
+    padding: 44px;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  a,
+  button {
+    user-select: none;
+  }
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+    background: #fff;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $silverThree;
+    border: 2px solid #fff;
+    &:hover {
+      background: #989fa8;
+    }
+    &:active {
+      background: $rollingStone;
+    }
+  }
+}

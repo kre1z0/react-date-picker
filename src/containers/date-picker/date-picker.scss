@@ -1,0 +1,90 @@
+.datePicker {
+  width: 230px;
+  overflow: hidden;
+  border-radius: 2px;
+  background-color: #ffffff;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
+
+  .control {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .currentDate {
+      font-size: 16px;
+      &:first-letter {
+        text-transform: uppercase;
+      }
+    }
+    .prev, .next {
+      cursor: pointer;
+      border: 4px solid transparent;
+    }
+    .prev {
+      border-right: 6px solid #cfd3d8;
+    }
+    .next {
+      border-left: 6px solid #cfd3d8;
+    }
+  }
+
+  .header {
+    display: flex;
+    width: 100%;
+    margin-bottom: 10px;
+    .item {
+      color: red;
+      font-size: 14px;
+      line-height: normal;
+      display: flex;
+      justify-content: center;
+      span {
+        &:first-letter {
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+
+  .calendar {
+    padding: 10px;
+    position: relative;
+    .grid {
+      flex-wrap: wrap;
+      display: flex;
+      .monthday {
+        color: gray;
+        text-align: center;
+        font-size: 14px;
+        > span {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 25px;
+          height: 25px;
+          cursor: pointer;
+          &:hover {
+            background-color: #35da00;
+          }
+        }
+        &.currentDay {
+          > span {
+            color: blue;
+            background-color: green;
+          }
+        }
+      }
+      &.onlyCurrentMonthDay {
+        .prevMonthDay, .nextMonthDay {
+          visibility: hidden;
+        }
+      }
+    }
+  }
+
+  .number-input-container {
+    .number-input {
+      background-color: green;
+    }
+  }
+}
