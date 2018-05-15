@@ -1,13 +1,5 @@
 .datePicker-container {
   position: relative;
-  .number-input > input, .date-picker-control {
-    padding: 0 10px;
-    font-size: 16px;
-    height: 32px;
-    border: solid 1px #e1e3e6;
-    border-radius: 2px;
-  }
-
   .date-picker-control {
     width: 100px;
     &.withTime {
@@ -27,9 +19,19 @@
   }
 }
 
+.date-picker-number-input > input, .date-picker-control {
+  padding: 0 10px;
+  font-size: 16px;
+  height: 32px;
+  border: solid 1px #e1e3e6;
+  border-radius: 2px;
+  &:focus {
+    border-color: #a1c04c;
+  }
+}
+
 .datePicker {
   position: absolute;
-  transform: translateY(-100%);
   width: 230px;
   overflow: hidden;
   border-radius: 2px;
@@ -128,7 +130,7 @@
     margin: 0 15px;
     padding: 10px 0 15px 0;
     display: flex;
-    .number-input {
+    .date-picker-number-input {
       display: flex;
       width: calc(100% / 3);
       margin-right: 10px;
@@ -139,7 +141,6 @@
         text-align: center;
         padding: 0 5px;
         width: 38px;
-        height: 32px;
       }
       label {
         text-align: center;

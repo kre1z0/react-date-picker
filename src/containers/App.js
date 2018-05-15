@@ -20,7 +20,9 @@ class App extends Component {
 
         return (
             <div className="app-container">
-                <DatePicker value={date} onChange={this.onPickDate} />
+                <div className="test-container">
+                    <DatePicker value={date} onChange={this.onPickDate} />
+                </div>
             </div>
         );
     }

@@ -35,8 +35,9 @@ class DatePicker extends Component {
         onlyCurrentMonthDay: PropTypes.bool,
         withTime: PropTypes.bool,
         focus: PropTypes.bool,
+        height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         // only top and bottom
-        position: 'top',
+        position: PropTypes.string,
     };
 
     static defaultProps = {
@@ -45,6 +46,8 @@ class DatePicker extends Component {
         weekOffset: 0,
         onChange: null,
         withTime: true,
+        position: 'top',
+        height: 32,
     };
 
     state = {
@@ -58,6 +61,7 @@ class DatePicker extends Component {
         offsetTop: 0,
         offsetLeft: 0,
         error: false,
+        position: this.props.position,
     };
 
     componentDidMount() {
@@ -80,7 +84,14 @@ class DatePicker extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { value } = this.props;
+        const { value, position } = this.props;
+
+        if (position !== nextProps.position) {
+            this.setState({
+                position: nextProps.position,
+            });
+        }
+
         if (value !== nextProps.value) {
             this.setState({
                 inputValue: this._getFormattedDate(nextProps.value),
@@ -93,10 +104,18 @@ class DatePicker extends Component {
         const container = this.container;
         const top = container.offsetTop;
         const left = container.offsetLeft;
+        const datePickerHeight = this.datePicker.offsetHeight;
+
         if (offsetTop !== top || offsetLeft !== left) {
             this.setState({
                 offsetTop: top,
                 offsetLeft: left,
+            });
+        }
+
+        if (datePickerHeight > top) {
+            this.setState({
+                position: 'bottom',
             });
         }
     };
@@ -370,7 +389,13 @@ class DatePicker extends Component {
     };
 
     render() {
-        const { onlyCurrentMonthDay, weekOffset, value, withTime } = this.props;
+        const {
+            onlyCurrentMonthDay,
+            weekOffset,
+            value,
+            withTime,
+            height,
+        } = this.props;
         const {
             date,
             inputValue,
@@ -378,6 +403,7 @@ class DatePicker extends Component {
             error,
             offsetTop,
             offsetLeft,
+            position,
         } = this.state;
 
         return (
@@ -392,6 +418,9 @@ class DatePicker extends Component {
                         style={{
                             top: offsetTop,
                             left: offsetLeft,
+                            transform: `translateY(${position === 'top'
+                                ? -100
+                                : height}${position === 'top' ? '%' : 'px'})`,
                         }}
                     >
                         <Control
@@ -414,6 +443,7 @@ class DatePicker extends Component {
                     </div>
                 </CalendarPortal>
                 <MaskedInput
+                    style={{ height }}
                     ref={input => this.onRefInput(input)}
                     value={inputValue}
                     mask={this.getMask()}

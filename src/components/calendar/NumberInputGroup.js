@@ -2,7 +2,7 @@ import React from 'react';
 
 export const NumberInputGroup = ({ onChange, name, value, label }) => {
     return (
-        <div className="number-input">
+        <div className="date-picker-number-input">
             <input
                 type="text"
                 value={value}
