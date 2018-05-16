@@ -1,15 +1,17 @@
 import React from 'react';
+import moment from "moment/moment";
 
-export const Header = ({ items }) => {
+export const Header = () => {
+    const weekdays = moment.weekdaysShort();
     return (
         <div className="header">
-            {items.map((item, i) => {
+            {weekdays.map((item, i) => {
                 return (
                     <div
                         key={`${item}-${i}`}
                         className="weekday"
                         style={{
-                            width: `calc(100% / ${items.length}`,
+                            width: `calc(100% / ${weekdays.length}`,
                         }}
                     >
                         <span>

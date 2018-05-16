@@ -5,6 +5,8 @@ import moment from 'moment';
 import 'moment/locale/ru';
 
 import { CalendarPortal } from './CalendarPortal';
+import { MontshList } from './MonthsList';
+import { YearsList } from './YearsList';
 import { Control } from './Control';
 import { Calendar } from './Calendar';
 import { Time } from './Time';
@@ -423,13 +425,11 @@ class DatePicker extends Component {
         }
     };
 
-    onYearChange = () => {
+    onYearChange = () => {};
 
-    }
-
-    onMonthChange = () => {
-
-    }
+    onMonthChange = monthIndex => {
+        console.info('--> onMonthChange', monthIndex);
+    };
 
     render() {
         const {
@@ -454,6 +454,8 @@ class DatePicker extends Component {
             isOpen,
         } = this.state;
 
+        const months = moment.months();
+
         return (
             <div
                 className={`datePicker-container ${containerClassName
@@ -475,6 +477,12 @@ class DatePicker extends Component {
                                 : height}${position === 'top' ? '%' : 'px'})`,
                         }}
                     >
+                        <MontshList
+                            date={date}
+                            months={months}
+                            onChange={this.onMonthChange}
+                        />
+                        <YearsList />
                         <Control
                             date={date}
                             onPrev={this.handlePrevTime}

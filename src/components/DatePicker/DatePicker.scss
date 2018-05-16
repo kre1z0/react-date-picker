@@ -63,10 +63,63 @@
   position: absolute;
   z-index: 999;
   width: 230px;
-  overflow: hidden;
   border-radius: 2px;
   background-color: #ffffff;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
+
+  .datapicker-dropdown-list {
+    top: -4px;
+    overflow: auto;
+    z-index: 9999;
+    width: 107px;
+    position: absolute;
+    border-radius: 2px;
+    background-color: #ffffff;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
+    height: 260px;
+    &.months-list {
+      left: 40px;
+    }
+    &.years-list {
+      display: none;
+      right: 4px;
+    }
+    > li {
+      padding: 10px 15px;
+      cursor: pointer;
+      &:first-letter {
+        text-transform: uppercase;
+      }
+      &.active-item {
+        color: #a1c04c;
+      }
+      &:hover {
+        background-color: rgba(216, 216, 216, 0.2);
+      }
+    }
+
+    &::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+      background: #fff;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      min-width: 4.444em;
+      min-height: 4.444em;
+      background: rgb(216, 216, 216);
+      border: 4px solid #fff;
+      border-radius: 14px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 100, 100, 0.4);
+    }
+
+    &::-webkit-scrollbar-thumb:active {
+      background: rgba(0, 0, 0, 0.4);
+    }
+  }
 
   .control {
     padding: 0 15px;
@@ -171,7 +224,7 @@
       &.disabledOffsetDate {
         .prevMonthDay, .nextMonthDay {
           > span {
-            color: rgba(168,175,184, 0.5);
+            color: rgba(168, 175, 184, 0.5);
             pointer-events: none;
             cursor: default;
             &:hover {

@@ -6,8 +6,6 @@ import { Monthday } from './Monthday';
 import { createDateObjects } from './createDateObjects';
 
 export class Calendar extends Component {
-    initCalendarHeader = () => moment.weekdaysShort(true);
-
     render() {
         const {
             weekOffset,
@@ -18,9 +16,11 @@ export class Calendar extends Component {
             disabledOffsetDate,
         } = this.props;
 
+        const weekdays = moment.weekdaysShort();
+
         return (
             <div className="calendar">
-                <Header items={this.initCalendarHeader()} />
+                <Header items={weekdays} />
                 <div
                     className={`grid ${withOffsetDate
                         ? ''
@@ -32,9 +32,7 @@ export class Calendar extends Component {
                         return (
                             <Monthday
                                 value={value}
-                                headerItemsLength={
-                                    this.initCalendarHeader().length
-                                }
+                                weekdays={weekdays}
                                 onChange={onChange}
                                 {...item}
                                 key={`${item.date.format()}-${i}`}

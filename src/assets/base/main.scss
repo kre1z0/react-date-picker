@@ -90,20 +90,4 @@
   button {
     user-select: none;
   }
-  ::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
-    background: #fff;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: $silverThree;
-    border: 2px solid #fff;
-    &:hover {
-      background: #989fa8;
-    }
-    &:active {
-      background: $rollingStone;
-    }
-  }
 }

@@ -4,7 +4,7 @@ export const Monthday = ({
     date,
     classNames,
     onChange,
-    headerItemsLength,
+    weekdays,
     item,
     value,
 }) => {
@@ -14,7 +14,7 @@ export const Monthday = ({
                 ? 'currentDay'
                 : ''} ${classNames ? classNames : ''}`}
             style={{
-                width: `calc(100% / ${headerItemsLength})`,
+                width: `calc(100% / ${weekdays.length})`,
             }}
         >
             <span onClick={() => onChange(date)}>
