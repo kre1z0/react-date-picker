@@ -64,6 +64,7 @@ class DatePicker extends Component {
         error: false,
         position: this.props.position,
         isOpen: false,
+        monthListIsOpen: false,
     };
 
     componentDidMount() {
@@ -318,8 +319,6 @@ class DatePicker extends Component {
         if (elem) this.datePicker = elem;
     };
 
-    _openCalendar = () => this.setState({ isOpen: true });
-
     _getFormattedDate = value => {
         const { withTime } = this.props;
 
@@ -428,8 +427,20 @@ class DatePicker extends Component {
     onYearChange = () => {};
 
     onMonthChange = monthIndex => {
-        console.info('--> onMonthChange', monthIndex);
+        const { date } = this.state;
+        const selectedMonth = moment(date)
+            .startOf('years')
+            .add(monthIndex, 'month');
+
+        this.setState({
+            monthListIsOpen: false,
+            date: selectedMonth,
+        });
     };
+
+    _openCalendar = () => this.setState({ isOpen: true });
+
+    openMontsList = () => this.setState({ monthListIsOpen: true });
 
     render() {
         const {
@@ -452,6 +463,7 @@ class DatePicker extends Component {
             offsetLeft,
             position,
             isOpen,
+            monthListIsOpen,
         } = this.state;
 
         const months = moment.months();
@@ -478,12 +490,14 @@ class DatePicker extends Component {
                         }}
                     >
                         <MontshList
+                            monthListIsOpen={monthListIsOpen}
                             date={date}
                             months={months}
                             onChange={this.onMonthChange}
                         />
                         <YearsList />
                         <Control
+                            openMontsList={this.openMontsList}
                             date={date}
                             onPrev={this.handlePrevTime}
                             onNext={this.handleNextTime}

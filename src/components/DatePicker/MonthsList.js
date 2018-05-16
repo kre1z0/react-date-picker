@@ -1,10 +1,13 @@
 import React from 'react';
 import moment from 'moment';
 
-export const MontshList = ({ months, onChange, date }) => {
-    console.info('--> ggwp', moment(date).month());
+export const MontshList = ({ months, onChange, date, monthListIsOpen }) => {
     return (
-        <ul className="datapicker-dropdown-list months-list">
+        <ul
+            className={`datapicker-dropdown-list months-list ${monthListIsOpen
+                ? 'dropdown-list-is-open'
+                : ''}`}
+        >
             {months &&
                 months.map((month, index) =>
                     <li

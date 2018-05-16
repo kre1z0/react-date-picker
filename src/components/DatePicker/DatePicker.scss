@@ -76,13 +76,17 @@
     border-radius: 2px;
     background-color: #ffffff;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
-    height: 260px;
+    height: 0;
+    transition: height .2s ease;
     &.months-list {
       left: 40px;
     }
     &.years-list {
       display: none;
       right: 4px;
+    }
+    &.dropdown-list-is-open {
+      height: 260px;
     }
     > li {
       padding: 10px 15px;
@@ -139,7 +143,7 @@
       display: flex;
       color: #a1c04c;
       font-size: 16px;
-      .current-year {
+      .current-month {
         margin-right: 15px;
         &:first-letter {
           text-transform: uppercase;
@@ -210,6 +214,11 @@
           > span {
             color: #fff;
             background-color: #a1c04c;
+          }
+          &.nextMonthDay, &.prevMonthDay {
+            > span {
+              background-color: rgba(161,192,76, 0.4);
+            }
           }
         }
       }
