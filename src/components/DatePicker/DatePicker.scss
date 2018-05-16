@@ -1,14 +1,14 @@
 .datePicker-container {
   display: inline-block;
   position: relative;
+  width: 124px;
+  &.withTime {
+    width: 194px;
+  }
   .date-picker-control {
+    width: 100%;
     text-align: start;
     box-sizing: border-box;
-    width: 124px;
-    &.withTime {
-      padding: 0 30px 0 10px;
-      width: 194px;
-    }
     &.error {
       border-color: rgb(255, 105, 51);
     }
@@ -58,6 +58,8 @@
 }
 
 .datePicker {
+  display: flex;
+  flex-direction: column;
   position: absolute;
   z-index: 999;
   width: 230px;
@@ -72,11 +74,23 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .current-year, .current-month {
+      cursor: pointer;
+      &:hover {
+        filter: brightness(0.9);
+      }
+    }
+
     .currentDate {
+      display: flex;
       color: #a1c04c;
       font-size: 16px;
-      &:first-letter {
-        text-transform: uppercase;
+      .current-year {
+        margin-right: 15px;
+        &:first-letter {
+          text-transform: uppercase;
+        }
       }
     }
     .control-btn-wrapper {
@@ -119,7 +133,7 @@
   }
 
   .calendar {
-    padding: 10px;
+    padding: 10px 10px 0 10px;
     position: relative;
     .grid {
       flex-wrap: wrap;
@@ -146,17 +160,32 @@
           }
         }
       }
-      &.onlyCurrentMonthDay {
+      .prevMonthDay, .nextMonthDay {
+        color: #a8afb8;
+      }
+      &.withoutOffsetDate {
         .prevMonthDay, .nextMonthDay {
           visibility: hidden;
+        }
+      }
+      &.disabledOffsetDate {
+        .prevMonthDay, .nextMonthDay {
+          > span {
+            color: rgba(168,175,184, 0.5);
+            pointer-events: none;
+            cursor: default;
+            &:hover {
+              background-color: transparent;
+            }
+          }
         }
       }
     }
   }
   .number-input-container {
+    margin: auto 15px 15px 15px;
     border-top: 1px solid #d8d8d8;
-    margin: 0 15px;
-    padding: 10px 0 15px 0;
+    padding: 10px 0 0 0;
     display: flex;
     .date-picker-number-input {
       display: flex;

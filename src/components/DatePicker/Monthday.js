@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 
 export const Monthday = ({
     date,
@@ -14,12 +13,11 @@ export const Monthday = ({
             className={`monthday ${date.isSame(value, 'day')
                 ? 'currentDay'
                 : ''} ${classNames ? classNames : ''}`}
-            onClick={() => onChange(date)}
             style={{
                 width: `calc(100% / ${headerItemsLength})`,
             }}
         >
-            <span>
+            <span onClick={() => onChange(date)}>
                 {date.format('D')}
             </span>
         </div>

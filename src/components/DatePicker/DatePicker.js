@@ -26,7 +26,6 @@ class DatePicker extends Component {
             PropTypes.object,
         ]),
         weekOffset: PropTypes.number,
-        onlyCurrentMonthDay: PropTypes.bool,
         withTime: PropTypes.bool,
         focus: PropTypes.bool,
         height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -34,6 +33,8 @@ class DatePicker extends Component {
         position: PropTypes.string,
         className: PropTypes.string,
         containerClassName: PropTypes.string,
+        withOffsetDate: PropTypes.bool,
+        disabledOffsetDate: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -44,6 +45,8 @@ class DatePicker extends Component {
         withTime: true,
         position: 'top',
         height: 32,
+        withOffsetDate: false,
+        disabledOffsetDate: false,
     };
 
     state = {
@@ -84,6 +87,10 @@ class DatePicker extends Component {
                 error: true,
             });
         }
+
+        setTimeout(() => {
+            this._onResize();
+        }, 444);
     }
 
     componentWillUnmount() {
@@ -416,15 +423,24 @@ class DatePicker extends Component {
         }
     };
 
+    onYearChange = () => {
+
+    }
+
+    onMonthChange = () => {
+
+    }
+
     render() {
         const {
-            onlyCurrentMonthDay,
             weekOffset,
             value,
             withTime,
             height,
             className,
             containerClassName,
+            withOffsetDate,
+            disabledOffsetDate,
         } = this.props;
 
         const {
@@ -442,7 +458,7 @@ class DatePicker extends Component {
             <div
                 className={`datePicker-container ${containerClassName
                     ? containerClassName
-                    : ''}`}
+                    : ''} ${withTime ? 'withTime' : ''} `}
                 ref={input => this.onRefContainer(input)}
             >
                 <CalendarPortal>
@@ -450,6 +466,7 @@ class DatePicker extends Component {
                         ref={input => this.onRefDatePicker(input)}
                         className={`datePicker ${className ? className : ''}`}
                         style={{
+                            height: withTime ? 306 : 248,
                             visibility: isOpen ? 'visible' : 'hidden',
                             top: offsetTop,
                             left: offsetLeft,
@@ -464,9 +481,10 @@ class DatePicker extends Component {
                             onNext={this.handleNextTime}
                         />
                         <Calendar
+                            withOffsetDate={withOffsetDate}
+                            disabledOffsetDate={disabledOffsetDate}
                             value={value}
                             weekOffset={weekOffset}
-                            onlyCurrentMonthDay={onlyCurrentMonthDay}
                             onChange={this.onPickDate}
                             date={date}
                         />
@@ -482,9 +500,7 @@ class DatePicker extends Component {
                     ref={input => this.onRefInput(input)}
                     value={inputValue}
                     mask={this.getMask()}
-                    className={`${withTime
-                        ? 'date-picker-control withTime'
-                        : 'date-picker-control'} ${error ? 'error' : ''}`}
+                    className={`date-picker-control ${error ? 'error' : ''}`}
                     keepCharPositions={true}
                     placeholder={this.getPlaceHolder()}
                     onBlur={this._sumbitDate}

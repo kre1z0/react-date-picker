@@ -22,19 +22,27 @@
   .app-container {
     height: 100%;
     width: 100%;
+  }
+
+  .app-container {
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-
     .root-container {
-      .datePicker-container {
-        &:first-child {
-          margin-right: 10px;
+      display: flex;
+      .group {
+        margin-right: 10px;
+        display: flex;
+        flex-direction: column;
+        .label {
+          font-size: 12px;
+          padding-bottom: 5px;
+          color: #777777;
         }
         &:last-child {
-          margin-left: 10px;
+          margin-right: 0;
         }
       }
     }
@@ -67,7 +75,6 @@
         }
       }
     }
-
   }
 
   .license {

@@ -12,23 +12,23 @@ export class Calendar extends Component {
         const {
             weekOffset,
             date,
-            onlyCurrentMonthDay,
+            withOffsetDate,
             onChange,
             value,
+            disabledOffsetDate,
         } = this.props;
 
         return (
             <div className="calendar">
                 <Header items={this.initCalendarHeader()} />
                 <div
-                    className={`grid ${onlyCurrentMonthDay
-                        ? 'onlyCurrentMonthDay'
+                    className={`grid ${withOffsetDate
+                        ? ''
+                        : 'withoutOffsetDate'} ${disabledOffsetDate
+                        ? 'disabledOffsetDate'
                         : ''}`}
                 >
-                    {createDateObjects(
-                        date,
-                        weekOffset,
-                    ).map((item, i) => {
+                    {createDateObjects(date, weekOffset).map((item, i) => {
                         return (
                             <Monthday
                                 value={value}

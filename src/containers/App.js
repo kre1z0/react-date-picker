@@ -4,21 +4,16 @@ import DatePicker from '../components/DatePicker/DatePicker';
 
 class App extends Component {
     state = {
-        startDate: '2018-05-30T14:04:04+03:00',
-        endDate: '2018-08-04T04:04:04+03:00',
+        withTime: '2018-05-30T14:04:04+03:00',
+        withOutTime: '2018-08-04T04:04:04+03:00',
+        withOffsetDate: '2018-08-04T12:55:12+03:00',
+        withDisabledOffsetDate: '2018-08-04T18:44:04+03:00',
     };
 
-    onPickDateStartDate = (date, name) => {
+    onPickDate = (date, name) => {
         console.info(`--> ${name} <--`, date);
         this.setState({
-            startDate: date,
-        });
-    };
-
-    onPickDateEndDate = (date, name) => {
-        console.info(`--> ${name} <--`, date);
-        this.setState({
-            endDate: date,
+            [name]: date,
         });
     };
 
@@ -30,43 +25,77 @@ class App extends Component {
 
     _pickRandomDate = () => {
         this.setState({
-            startDate: this._randomDate(new Date(1988, 0, 1), new Date()),
-            endDate: this._randomDate(new Date(2000, 0, 1), new Date()),
+            withTime: this._randomDate(new Date(1988, 0, 1), new Date()),
+            withOutTime: this._randomDate(new Date(2000, 0, 1), new Date()),
+            withOffsetDate: this._randomDate(new Date(2004, 0, 1), new Date()),
+            withDisabledOffsetDate: this._randomDate(new Date(2007, 0, 1), new Date()),
         });
     };
 
     _pickCurrentDate = () => {
         this.setState({
-            startDate: new Date(),
-            endDate: new Date(),
+            withTime: new Date(),
+            withOutTime: new Date(),
+            withOffsetDate: new Date(),
+            withDisabledOffsetDate: new Date(),
         });
     };
 
     render() {
-        const { startDate, endDate } = this.state;
+        const { withTime, withOutTime, withOffsetDate, withDisabledOffsetDate } = this.state;
 
         return (
             <div className="app-container">
                 <div className="test-container">
                     <div className="root-container">
-                        <DatePicker
-                            withTime={false}
-                            value={startDate}
-                            onChange={date =>
-                                this.onPickDateStartDate(
-                                    date,
-                                    'datepicker without time',
-                                )}
-                        />
-                        -
-                        <DatePicker
-                            value={endDate}
-                            onChange={date =>
-                                this.onPickDateEndDate(
-                                    date,
-                                    'datepicker with time',
-                                )}
-                        />
+                        <div className="group">
+                            <div className="label">without time</div>
+                            <DatePicker
+                                withTime={false}
+                                value={withTime}
+                                onChange={date =>
+                                    this.onPickDate(
+                                        date,
+                                        'withTime',
+                                    )}
+                            />
+                        </div>
+                        <div className="group">
+                            <div className="label">with time</div>
+                            <DatePicker
+                                value={withOutTime}
+                                onChange={date =>
+                                    this.onPickDate(
+                                        date,
+                                        'withOutTime',
+                                    )}
+                            />
+                        </div>
+                        <div className="group">
+                            <div className="label">datepicker with offset date</div>
+                            <DatePicker
+                                withOffsetDate
+                                value={withOffsetDate}
+                                onChange={date =>
+                                    this.onPickDate(
+                                        date,
+                                        'withOffsetDate',
+                                    )}
+                            />
+                        </div>
+                        <div className="group">
+                            <div className="label">with disabled offset date</div>
+                            <DatePicker
+                                withOffsetDate
+                                disabledOffsetDate
+                                value={withDisabledOffsetDate}
+                                onChange={date =>
+                                    this.onPickDate(
+                                        date,
+                                        'withDisabledOffsetDate',
+                                    )}
+                            />
+                        </div>
                     </div>
                     <div className="button-group">
                         <button
