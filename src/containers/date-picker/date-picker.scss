@@ -1,12 +1,33 @@
 .datePicker-container {
+  display: inline-block;
   position: relative;
   .date-picker-control {
-    width: 100px;
+    width: 124px;
     &.withTime {
-      width: 183px;
+      padding: 0 30px 0 10px;
+      width: 194px;
     }
     &.error {
       border-color: rgb(255, 105, 51);
+    }
+  }
+
+  .toggle-button {
+    cursor: pointer;
+    padding: 0;
+    width: 15px;
+    height: 16px;
+    border: none;
+    top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+    right: 10px;
+    background: url(../../components/calendar/img/calendar_icon.svg);
+    &:hover {
+      filter: brightness(0.9);
+    }
+    &.isOpen {
+      background: url(../../components/calendar/img/calendar_icon_active.svg);
     }
   }
 
@@ -25,6 +46,9 @@
   height: 32px;
   border: solid 1px #e1e3e6;
   border-radius: 2px;
+  &::-ms-clear {
+    display: none;
+  }
   &:focus {
     border-color: #a1c04c;
   }
@@ -32,6 +56,7 @@
 
 .datePicker {
   position: absolute;
+  z-index: 999;
   width: 230px;
   overflow: hidden;
   border-radius: 2px;

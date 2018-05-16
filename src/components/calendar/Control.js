@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { PrevIcon, NextIcon } from '../icons';
-
 export const Control = ({ date, onPrev, onNext }) => {
     return (
         <div className="control">

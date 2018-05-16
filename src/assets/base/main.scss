@@ -5,7 +5,7 @@
     box-sizing: border-box;
     font-family: FedraSans, 'sans-serif';
     font-size: 14px;
-    background: $mainBackground;
+    background: #f1f1f1;
   }
 
   *, *:before, *:after {
@@ -23,18 +23,34 @@
     height: 100%;
     width: 100%;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
     .test-container {
-      width: 44vw;
-      height: 44vh;
+      > div {
+        &:first-child {
+          margin-right: 10px;
+        }
+        &:last-child {
+          margin-left: 10px;
+        }
+      }
     }
-  }
-
-  .app-container {
-    padding-top: 344px;
-    padding-left: 44px;
-    @media (max-width: 1000px) {
-      padding-top: 300px;
-      padding-left: 150px;
+    .random-date {
+      border: solid 1px #e1e3e6;
+      padding: 0 10px;
+      height: 32px;
+      border-radius: 2px;
+      cursor: pointer;
+      margin-top: 20px;
+      background-color: #fff;
+      &:hover {
+        filter: brightness(0.97);
+      }
+      &:active {
+        filter: brightness(0.95);
+      }
     }
   }
 

@@ -62,6 +62,7 @@ class DatePicker extends Component {
         offsetLeft: 0,
         error: false,
         position: this.props.position,
+        isOpen: false,
     };
 
     componentDidMount() {
@@ -69,6 +70,8 @@ class DatePicker extends Component {
         const { time } = this.state;
         moment.locale('ru');
         window.addEventListener('resize', this._onResize);
+        document.addEventListener('mousedown', this._handleClickOutside);
+        document.addEventListener('keydown', this._onKeyDown);
         this._onResize();
         this.setState({
             time: this._convertTimeToFilter(
@@ -81,6 +84,8 @@ class DatePicker extends Component {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this._onResize);
+        document.removeEventListener('mousedown', this._handleClickOutside);
+        document.removeEventListener('keydown', this._onKeyDown);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -94,10 +99,21 @@ class DatePicker extends Component {
 
         if (value !== nextProps.value) {
             this.setState({
+                date: moment(nextProps.value),
                 inputValue: this._getFormattedDate(nextProps.value),
             });
         }
     }
+
+    _handleClickOutside = event => {
+        const outside = !this.datePicker.contains(event.target);
+
+        if (this.datePicker && outside) {
+            this.setState({
+                isOpen: false,
+            });
+        }
+    };
 
     _onResize = () => {
         const { offsetTop, offsetLeft } = this.state;
@@ -112,7 +128,8 @@ class DatePicker extends Component {
                 offsetLeft: left,
             });
         }
-
+        console.info('--> datePickerHeight', datePickerHeight);
+        console.info('--> top', top);
         if (datePickerHeight > top) {
             this.setState({
                 position: 'bottom',
@@ -143,25 +160,6 @@ class DatePicker extends Component {
             (prev, curr) => prev + moment.duration(filters[curr], curr),
             0,
         );
-    };
-
-    _getFormattedDate = value => {
-        const { withTime } = this.props;
-
-        let date = this._dateFormatting(value, 'fullDate');
-
-        if (!withTime) {
-            date = this._dateFormatting(value);
-        }
-
-        return date;
-    };
-
-    _dateFormatting = (value, withTime) => {
-        if (withTime === 'fullDate')
-            return moment(value).format('DD.MM.YYYY H:mm:ss');
-        else if (withTime === 'time') return moment(value).format('H:mm:ss');
-        else return moment(value).format('DD.MM.YYYY');
     };
 
     handlePrevTime = () => {
@@ -206,6 +204,9 @@ class DatePicker extends Component {
         const enter = e.which === 13;
 
         if (esc || enter) {
+            this.setState({
+                isOpen: false,
+            });
             this.input.inputElement.blur();
             console.info('--> _onKeyDown');
         }
@@ -213,6 +214,7 @@ class DatePicker extends Component {
 
     _onBlur = () => {
         console.info('--> _onBlur');
+        this._sumbitDate();
     };
 
     onRefInput = input => {
@@ -307,7 +309,6 @@ class DatePicker extends Component {
         const { onChange, withTime, value } = this.props;
 
         let val = e.target.value;
-        console.info('--> val', val);
         const selectionStart = e.target.selectionStart;
         const maxLength = withTime ? 19 : 10;
         // const removalValue = this._getDifference(val, inputValue);
@@ -336,35 +337,44 @@ class DatePicker extends Component {
 
     getMask = () => {
         const { withTime } = this.props;
+        const { inputValue } = this.state;
+
+        const days = Number(inputValue.charAt(0)) === 3 ? /[0-1]/ : /[0-9]/;
+
+        const month = Number(inputValue.charAt(3)) === 1 ? /[0-2]/ : /[0-9]/;
+
         if (withTime) {
+            const hours =
+                Number(inputValue.charAt(11)) === 2 ? /[0-3]/ : /[0-9]/;
+
             return [
-                /[0-9]/,
-                /[0-9]/,
+                /[0-3]/,
+                days,
                 '.',
-                /[0-9]/,
-                /[0-9]/,
+                /[0-1]/,
+                month,
                 '.',
                 /[0-9]/,
                 /[0-9]/,
                 /[0-9]/,
                 /[0-9]/,
                 ' ',
-                /[0-9]/,
+                /[0-2]/,
+                hours,
+                ':',
+                /[0-5]/,
                 /[0-9]/,
                 ':',
-                /[0-9]/,
-                /[0-9]/,
-                ':',
-                /[0-9]/,
+                /[0-5]/,
                 /[0-9]/,
             ];
         } else {
             return [
-                /[0-9]/,
-                /[0-9]/,
+                /[0-3]/,
+                days,
                 '.',
-                /[0-9]/,
-                /[0-9]/,
+                /[0-1]/,
+                month,
                 '.',
                 /[0-9]/,
                 /[0-9]/,
@@ -388,6 +398,35 @@ class DatePicker extends Component {
         if (elem) this.datePicker = elem;
     };
 
+    _openCalendar = () => this.setState({ isOpen: true });
+
+    _getFormattedDate = value => {
+        const { withTime } = this.props;
+
+        let date = this._dateFormatting(value, 'fullDate');
+
+        if (!withTime) {
+            date = this._dateFormatting(value);
+        }
+
+        return date;
+    };
+
+    _dateFormatting = (value, withTime) => {
+        if (withTime === 'fullDate')
+            return moment(value).format('DD.MM.YYYY HH:mm:ss');
+        else if (withTime === 'time') return moment(value).format('H:mm:ss');
+        else return moment(value).format('DD.MM.YYYY');
+    };
+
+    _sumbitDate = () => {
+        const { inputValue } = this.state;
+        const { 0: day, 1: month, 2: year } = this._dateFormatting(
+            inputValue,
+        ).split('.');
+        console.info('--> _sumbitDate', day, 'month', month, 'year', year);
+    };
+
     render() {
         const {
             onlyCurrentMonthDay,
@@ -404,6 +443,7 @@ class DatePicker extends Component {
             offsetTop,
             offsetLeft,
             position,
+            isOpen,
         } = this.state;
 
         return (
@@ -416,6 +456,7 @@ class DatePicker extends Component {
                         ref={input => this.onRefDatePicker(input)}
                         className="datePicker"
                         style={{
+                            visibility: isOpen ? 'visible' : 'hidden',
                             top: offsetTop,
                             left: offsetLeft,
                             transform: `translateY(${position === 'top'
@@ -452,9 +493,12 @@ class DatePicker extends Component {
                         : 'date-picker-control'} ${error ? 'error' : ''}`}
                     keepCharPositions={true}
                     placeholder={this.getPlaceHolder()}
-                    onKeyDown={this._onKeyDown}
                     onBlur={this._onBlur}
                     onChange={this.onChangeInput}
+                />
+                <button
+                    className={`toggle-button ${isOpen ? 'isOpen' : ''}`}
+                    onClick={this._openCalendar}
                 />
                 {error &&
                     <div className="datePicker-error">
