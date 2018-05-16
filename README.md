@@ -4,4 +4,7 @@ https://kre1z0.github.io/react-date-picker/
 
 # License
 
-MIT
+	
+dependency - https://github.com/text-mask/text-mask
+
+MIT Igor Ivchuk
