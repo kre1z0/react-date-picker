@@ -120,12 +120,14 @@ class DatePicker extends Component {
     }
 
     _handleClickOutside = event => {
+        const { isOpen } = this.state;
         const outside = !this.datePicker.contains(event.target);
 
-        if (this.datePicker && outside) {
+        if (this.datePicker && outside && isOpen) {
             this.setState({
                 isOpen: false,
             });
+            this._sumbitDate();
         }
     };
 
@@ -226,6 +228,7 @@ class DatePicker extends Component {
                 isOpen: false,
             });
             this.input.inputElement.blur();
+            this._sumbitDate();
         }
     };
 
@@ -240,28 +243,6 @@ class DatePicker extends Component {
     };
 
     _isNumeric = n => !isNaN(parseFloat(n)) && isFinite(n);
-
-    onChangeNumberInput = (e, key) => {
-        const targetValue = Number(e.target.value);
-        if (!this._isNumeric(targetValue) || TIME_LIMIT[key] < targetValue)
-            return;
-        const { value } = this.props;
-        const { time } = this.state;
-
-        const { 0: inputDate, 1: inputTime } = this._dateFormatting(
-            value,
-            'fullDate',
-        ).split(' ');
-        const t = inputTime.split(':');
-        const index = Object.keys(time).findIndex(k => k === key);
-        t[index] = targetValue < 10 ? `0${targetValue}` : targetValue;
-        const val = `${inputDate} ${t[0]}:${t[1]}:${t[2]}`;
-
-        this.setState({
-            inputValue: val,
-            time: Object.assign({}, time, { [key]: targetValue }),
-        });
-    };
 
     onChangeInput = e => this.setState({ inputValue: e.target.value });
 
@@ -347,6 +328,27 @@ class DatePicker extends Component {
             return moment(value).format('DD.MM.YYYY HH:mm:ss');
         else if (withTime === 'time') return moment(value).format('H:mm:ss');
         else return moment(value).format('DD.MM.YYYY');
+    };
+
+    onChangeNumberInput = (e, key) => {
+        const targetValue = Number(e.target.value);
+        if (!this._isNumeric(targetValue) || TIME_LIMIT[key] < targetValue)
+            return;
+
+        const { time, inputValue } = this.state;
+
+        const { 0: inputDate, 1: inputTime } = inputValue.split(' ');
+        const t = inputTime.split(':');
+
+        const index = Object.keys(time).findIndex(k => k === key);
+        t[index] = targetValue < 10 ? `0${targetValue}` : targetValue;
+
+        const val = `${inputDate} ${t[0]}:${t[1]}:${t[2]}`;
+
+        this.setState({
+            inputValue: val,
+            time: Object.assign({}, time, { [key]: targetValue }),
+        });
     };
 
     _sumbitDate = () => {

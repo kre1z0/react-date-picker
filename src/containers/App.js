@@ -8,15 +8,15 @@ class App extends Component {
         endDate: '2018-08-04T04:04:04+03:00',
     };
 
-    onPickDateStartDate = date => {
-        console.info('--> onPickDateStartDate date <--', date);
+    onPickDateStartDate = (date, name) => {
+        console.info(`--> ${name} <--`, date);
         this.setState({
             startDate: date,
         });
     };
 
-    onPickDateEndDate = date => {
-        console.info('--> onPickDateEndDate date <--', date);
+    onPickDateEndDate = (date, name) => {
+        console.info(`--> ${name} <--`, date);
         this.setState({
             endDate: date,
         });
@@ -52,12 +52,20 @@ class App extends Component {
                         <DatePicker
                             withTime={false}
                             value={startDate}
-                            onChange={this.onPickDateStartDate}
+                            onChange={date =>
+                                this.onPickDateStartDate(
+                                    date,
+                                    'datepicker without time',
+                                )}
                         />
                         -
                         <DatePicker
                             value={endDate}
-                            onChange={this.onPickDateEndDate}
+                            onChange={date =>
+                                this.onPickDateEndDate(
+                                    date,
+                                    'datepicker with time',
+                                )}
                         />
                     </div>
                     <div className="button-group">

@@ -1,9 +1,6 @@
 import moment from 'moment';
 
-export function createDateObjects(
-    date,
-    weekOffset,
-) {
+export function createDateObjects(date, weekOffset) {
     const startOfMonth = date.startOf('month');
 
     let diff = startOfMonth.weekday() - weekOffset;
