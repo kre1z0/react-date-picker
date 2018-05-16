@@ -2,6 +2,8 @@
   display: inline-block;
   position: relative;
   .date-picker-control {
+    text-align: start;
+    box-sizing: border-box;
     width: 124px;
     &.withTime {
       padding: 0 30px 0 10px;
@@ -22,16 +24,17 @@
     transform: translateY(-50%);
     position: absolute;
     right: 10px;
-    background: url(../../components/calendar/img/calendar_icon.svg);
+    background: url(./img/calendar_icon.svg);
     &:hover {
       filter: brightness(0.9);
     }
     &.isOpen {
-      background: url(../../components/calendar/img/calendar_icon_active.svg);
+      background: url(./img/calendar_icon_active.svg);
     }
   }
 
   .datePicker-error {
+    white-space: nowrap;
     position: absolute;
     bottom: -2px;
     transform: translateY(100%);
@@ -151,7 +154,7 @@
     }
   }
   .number-input-container {
-    border-top: 1px solid  #d8d8d8;
+    border-top: 1px solid #d8d8d8;
     margin: 0 15px;
     padding: 10px 0 15px 0;
     display: flex;

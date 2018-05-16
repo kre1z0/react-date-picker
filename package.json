@@ -4,6 +4,7 @@
   "private": false,
   "homepage": "http://kre1z0.github.io/calendar",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.5",
     "moment": "^2.20.1",
     "numeral": "^2.0.6",
@@ -44,7 +45,7 @@
     "inquirer": "3.0.6",
     "node-sass": "^4.5.3",
     "object-assign": "4.1.1",
-    "postcss-flexbugs-fixes": "3.2.0",
+    "postcss-flexbugs-fixes": "3.3.1",
     "postcss-loader": "2.0.5",
     "promise": "7.1.1",
     "react-dev-utils": "^1.0.0",

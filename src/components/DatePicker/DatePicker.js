@@ -4,18 +4,12 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment/locale/ru';
 
-import { CalendarPortal } from '../../components/calendar/CalendarPortal';
-import { Control } from '../../components/calendar/Control';
-import { Calendar } from '../../components/calendar/Calendar';
-import { Time } from '../../components/calendar/Time';
+import { CalendarPortal } from './CalendarPortal';
+import { Control } from './Control';
+import { Calendar } from './Calendar';
+import { Time } from './Time';
 
-import './date-picker.scss';
-
-export const TIME_LABEL = {
-    h: 'ч.',
-    m: 'м.',
-    s: 'с.',
-};
+import './DatePicker.scss';
 
 const TIME_LIMIT = {
     h: 23,
@@ -38,6 +32,8 @@ class DatePicker extends Component {
         height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         // only top and bottom
         position: PropTypes.string,
+        className: PropTypes.string,
+        containerClassName: PropTypes.string,
     };
 
     static defaultProps = {
@@ -73,13 +69,21 @@ class DatePicker extends Component {
         document.addEventListener('mousedown', this._handleClickOutside);
         document.addEventListener('keydown', this._onKeyDown);
         this._onResize();
-        this.setState({
-            time: this._convertTimeToFilter(
-                moment(value) - moment(value).startOf('day'),
-                time,
-            ),
-            inputValue: this._getFormattedDate(value),
-        });
+
+        if (this._dateIsValid(value)) {
+            this.setState({
+                error: false,
+                time: this._convertTimeToFilter(
+                    moment(value) - moment(value).startOf('day'),
+                    time,
+                ),
+                inputValue: this._getFormattedDate(value),
+            });
+        } else {
+            this.setState({
+                error: true,
+            });
+        }
     }
 
     componentWillUnmount() {
@@ -89,7 +93,8 @@ class DatePicker extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { value, position } = this.props;
+        const { value, position, withTime } = this.props;
+        const { time } = this.state;
 
         if (position !== nextProps.position) {
             this.setState({
@@ -102,6 +107,15 @@ class DatePicker extends Component {
                 date: moment(nextProps.value),
                 inputValue: this._getFormattedDate(nextProps.value),
             });
+            if (withTime) {
+                this.setState({
+                    time: this._convertTimeToFilter(
+                        moment(nextProps.value) -
+                            moment(nextProps.value).startOf('day'),
+                        time,
+                    ),
+                });
+            }
         }
     }
 
@@ -128,8 +142,7 @@ class DatePicker extends Component {
                 offsetLeft: left,
             });
         }
-        console.info('--> datePickerHeight', datePickerHeight);
-        console.info('--> top', top);
+
         if (datePickerHeight > top) {
             this.setState({
                 position: 'bottom',
@@ -189,14 +202,19 @@ class DatePicker extends Component {
                 error: false,
             });
             if (withTime) {
-                onChange &&
-                    onChange(moment(date) + this._convertFiltersToTime(time));
-            } else onChange && onChange(moment(date));
+                const newDate = new Date(
+                    moment(date) + this._convertFiltersToTime(time),
+                );
+                onChange && onChange(newDate);
+            } else onChange && onChange(new Date(date));
         } else {
             this.setState({
                 error: true,
             });
         }
+        this.setState({
+            isOpen: false,
+        });
     };
 
     _onKeyDown = e => {
@@ -208,13 +226,7 @@ class DatePicker extends Component {
                 isOpen: false,
             });
             this.input.inputElement.blur();
-            console.info('--> _onKeyDown');
         }
-    };
-
-    _onBlur = () => {
-        console.info('--> _onBlur');
-        this._sumbitDate();
     };
 
     onRefInput = input => {
@@ -234,7 +246,7 @@ class DatePicker extends Component {
         if (!this._isNumeric(targetValue) || TIME_LIMIT[key] < targetValue)
             return;
         const { value } = this.props;
-        const { time, inputValue } = this.state;
+        const { time } = this.state;
 
         const { 0: inputDate, 1: inputTime } = this._dateFormatting(
             value,
@@ -251,89 +263,7 @@ class DatePicker extends Component {
         });
     };
 
-    _maskingValue = value => {
-        const { withTime } = this.props;
-        const length = value.length;
-        const maxLength = withTime ? 19 : 10;
-        const lastIndex = value.length - 1;
-        const lastChar = value.charAt(lastIndex);
-
-        if (
-            (length === 2 && value.charAt(3) !== '.') ||
-            (length === 5 && value.charAt(6) !== '.')
-        ) {
-            value += '.';
-        } else if (
-            (length === 3 && value.charAt(3) === '') ||
-            (length === 6 && value.charAt(6) === '')
-        ) {
-            value = value.substring(0, lastIndex) + '.' + lastChar;
-        }
-
-        if (withTime) {
-            if (length === 10) {
-                value += ' ';
-            } else if (length === 11 && value.charAt(11) === '') {
-                value = value.substring(0, lastIndex) + ' ' + lastChar;
-            } else if (
-                (length === 13 && value.charAt(13) !== ':') ||
-                (length === 16 && value.charAt(16) !== ':')
-            ) {
-                value += ':';
-            } else if (
-                (length === 14 && value.charAt(14) === '') ||
-                (length === 17 && value.charAt(17) === '')
-            ) {
-                value = value.substring(0, lastIndex) + ':' + lastChar;
-            }
-        }
-
-        return value;
-    };
-
-    _getDifference = (a, b) => {
-        var i = 0;
-        var j = 0;
-        var result = '';
-
-        while (j < b.length) {
-            if (a[i] !== b[j] || i === a.length) result += b[j];
-            else i++;
-            j++;
-        }
-        return result;
-    };
-
-    onChangeInput = e => {
-        const { inputValue } = this.state;
-        const { onChange, withTime, value } = this.props;
-
-        let val = e.target.value;
-        const selectionStart = e.target.selectionStart;
-        const maxLength = withTime ? 19 : 10;
-        // const removalValue = this._getDifference(val, inputValue);
-        // const regExp = /([:. ])/g;
-        // const isMark = regExp.test(removalValue);
-        // const valueWithoutMarks = val.replace(regExp, '');
-
-        // if (
-        //     !this._isNumeric(valueWithoutMarks) &&
-        //     Number(valueWithoutMarks) !== 0
-        // )
-        //     return;
-        // const removal = val.length < inputValue.length;
-
-        // if (val.length > maxLength && !removal) return;
-        //
-        // if (!removal) val = this._maskingValue(val);
-
-        // if (val.length >= maxLength && !removal)
-        //     val = val.slice(0, val.length - 1);
-
-        this.setState({
-            inputValue: val,
-        });
-    };
+    onChangeInput = e => this.setState({ inputValue: e.target.value });
 
     getMask = () => {
         const { withTime } = this.props;
@@ -386,7 +316,7 @@ class DatePicker extends Component {
 
     getPlaceHolder = () => {
         const { withTime } = this.props;
-        if (withTime) return '27.12.1988 22:22:22';
+        if (withTime) return '27.12.1988 00:00:00';
         else return '27.12.1988';
     };
 
@@ -420,11 +350,68 @@ class DatePicker extends Component {
     };
 
     _sumbitDate = () => {
+        const { withTime, onChange } = this.props;
         const { inputValue } = this.state;
-        const { 0: day, 1: month, 2: year } = this._dateFormatting(
-            inputValue,
-        ).split('.');
-        console.info('--> _sumbitDate', day, 'month', month, 'year', year);
+
+        if (inputValue === '') {
+            this.setState({
+                error: 'введите дату',
+            });
+            return;
+        }
+
+        const underscore = /[_]/g;
+        const { 0: day, 1: month, 2: year } = inputValue
+            .split(' ')[0]
+            .split('.')
+            .map((s, index) => {
+                const withoutUnderscore = s.replace(underscore, '');
+                const isEmpty =
+                    withoutUnderscore === '' || Number(withoutUnderscore) === 0;
+
+                if (isEmpty && (index === 0 || index === 1)) {
+                    return 1;
+                } else if (index === 2) {
+                    if (Number(withoutUnderscore) < 1975) return 1975;
+                    else return Number(withoutUnderscore);
+                } else {
+                    return Number(withoutUnderscore);
+                }
+            });
+
+        const newMonth = Number(month - 1);
+
+        if (withTime) {
+            const { 0: hour, 1: minute, 2: second } = inputValue
+                .split(' ')[1]
+                .split(':')
+                .map(s => s.replace(underscore, ''));
+
+            const date = new Date(year, newMonth, day, hour, minute, second);
+
+            if (this._dateIsValid(date)) {
+                this.setState({
+                    error: false,
+                });
+                onChange && onChange(date);
+            } else {
+                this.setState({
+                    error: true,
+                });
+            }
+        } else {
+            const date = new Date(year, newMonth, day);
+            if (this._dateIsValid(date)) {
+                this.setState({
+                    error: false,
+                });
+                onChange && onChange(date);
+            } else {
+                this.setState({
+                    error: true,
+                });
+            }
+        }
     };
 
     render() {
@@ -434,7 +421,10 @@ class DatePicker extends Component {
             value,
             withTime,
             height,
+            className,
+            containerClassName,
         } = this.props;
+
         const {
             date,
             inputValue,
@@ -448,13 +438,15 @@ class DatePicker extends Component {
 
         return (
             <div
-                className="datePicker-container"
+                className={`datePicker-container ${containerClassName
+                    ? containerClassName
+                    : ''}`}
                 ref={input => this.onRefContainer(input)}
             >
                 <CalendarPortal>
                     <div
                         ref={input => this.onRefDatePicker(input)}
-                        className="datePicker"
+                        className={`datePicker ${className ? className : ''}`}
                         style={{
                             visibility: isOpen ? 'visible' : 'hidden',
                             top: offsetTop,
@@ -493,7 +485,7 @@ class DatePicker extends Component {
                         : 'date-picker-control'} ${error ? 'error' : ''}`}
                     keepCharPositions={true}
                     placeholder={this.getPlaceHolder()}
-                    onBlur={this._onBlur}
+                    onBlur={this._sumbitDate}
                     onChange={this.onChangeInput}
                 />
                 <button
@@ -502,7 +494,9 @@ class DatePicker extends Component {
                 />
                 {error &&
                     <div className="datePicker-error">
-                        неверный формат даты
+                        {typeof error === 'boolean'
+                            ? 'неверный формат даты'
+                            : 'введите дату'}
                     </div>}
             </div>
         );

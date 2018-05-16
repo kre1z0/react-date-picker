@@ -1,7 +1,12 @@
 import React from 'react';
 
 import { NumberInputGroup } from './NumberInputGroup';
-import { TIME_LABEL } from '../../containers/date-picker';
+
+const TIME_LABEL = {
+    h: 'ч.',
+    m: 'м.',
+    s: 'с.',
+};
 
 export const Time = ({ time, onChange }) => {
     return (

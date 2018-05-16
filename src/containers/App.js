@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
-import DatePicker from './date-picker';
-import moment from 'moment/moment';
+import DatePicker from '../components/DatePicker/DatePicker';
 
 class App extends Component {
     state = {
@@ -10,14 +9,14 @@ class App extends Component {
     };
 
     onPickDateStartDate = date => {
-        console.info('--> DATE  ggwp nore <--', moment(date).format());
+        console.info('--> onPickDateStartDate date <--', date);
         this.setState({
             startDate: date,
         });
     };
 
     onPickDateEndDate = date => {
-        console.info('--> DATE  ggwp nore <--', moment(date).format());
+        console.info('--> onPickDateEndDate date <--', date);
         this.setState({
             endDate: date,
         });
@@ -29,10 +28,17 @@ class App extends Component {
         );
     };
 
-    _onPickRandomDate = () => {
+    _pickRandomDate = () => {
         this.setState({
             startDate: this._randomDate(new Date(1988, 0, 1), new Date()),
             endDate: this._randomDate(new Date(2000, 0, 1), new Date()),
+        });
+    };
+
+    _pickCurrentDate = () => {
+        this.setState({
+            startDate: new Date(),
+            endDate: new Date(),
         });
     };
 
@@ -42,20 +48,34 @@ class App extends Component {
         return (
             <div className="app-container">
                 <div className="test-container">
-                    <DatePicker
-                        withTime={false}
-                        value={startDate}
-                        onChange={this.onPickDateStartDate}
-                    />
-                    -
-                    <DatePicker
-                        value={endDate}
-                        onChange={this.onPickDateEndDate}
-                    />
+                    <div className="root-container">
+                        <DatePicker
+                            withTime={false}
+                            value={startDate}
+                            onChange={this.onPickDateStartDate}
+                        />
+                        -
+                        <DatePicker
+                            value={endDate}
+                            onChange={this.onPickDateEndDate}
+                        />
+                    </div>
+                    <div className="button-group">
+                        <button
+                            className="button"
+                            onClick={this._pickCurrentDate}
+                        >
+                            current date
+                        </button>
+                        <button
+                            className="button"
+                            onClick={this._pickRandomDate}
+                        >
+                            generate random date
+                        </button>
+                    </div>
                 </div>
-                <button className="random-date" onClick={this._onPickRandomDate}>
-                    generate random date
-                </button>
+                <div className="license">handmade by kreizo</div>
             </div>
         );
     }

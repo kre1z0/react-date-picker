@@ -1,8 +1,6 @@
 # Demo
 
-
-
-https://kre1z0.github.io/calendar/
+https://kre1z0.github.io/react-date-picker/
 
 # License
 

@@ -27,8 +27,9 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    .test-container {
-      > div {
+
+    .root-container {
+      .datePicker-container {
         &:first-child {
           margin-right: 10px;
         }
@@ -37,21 +38,45 @@
         }
       }
     }
-    .random-date {
-      border: solid 1px #e1e3e6;
-      padding: 0 10px;
-      height: 32px;
-      border-radius: 2px;
-      cursor: pointer;
-      margin-top: 20px;
-      background-color: #fff;
-      &:hover {
-        filter: brightness(0.97);
-      }
-      &:active {
-        filter: brightness(0.95);
+
+    .button-group {
+      border-top: 1px dashed #8c8c8c;
+      padding-top: 14px;
+      margin-top: 22px;
+      padding-left: 34px;
+      .button {
+        font-size: 12px;
+        height: 24px;
+        box-sizing: border-box;
+        display: inline-block;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 0 10px;
+        border-radius: 2px;
+        color: #fff;
+        border: none;
+        background-color: #759b21;
+        &:hover {
+          filter: brightness(0.97);
+        }
+        &:active {
+          filter: brightness(0.95);
+        }
+        &:first-child {
+          margin-right: 28px;
+        }
       }
     }
+
+  }
+
+  .license {
+    color: #64c76c;
+    position: absolute;
+    bottom: 44px;
+    right: 44px;
+    font-size: 14px;
+    padding: 5px 10px;
   }
 
   a,

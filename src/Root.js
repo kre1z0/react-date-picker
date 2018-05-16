@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import 'babel-polyfill';
 
 import App from './containers/App';
 
