@@ -1,8 +1,8 @@
 {
-  "name": "calendar",
-  "version": "0.1.0",
+  "name": "react-date-picker",
+  "version": "1.0.0",
   "private": false,
-  "homepage": "http://kre1z0.github.io/calendar",
+  "homepage": "http://kre1z0.github.io/react-date-picker",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.5",
