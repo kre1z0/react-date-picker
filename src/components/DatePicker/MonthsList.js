@@ -2,7 +2,6 @@ import React from 'react';
 import moment from 'moment';
 
 export const MontshList = ({
-    months,
     onChange,
     date,
     monthListIsOpen,
@@ -15,18 +14,17 @@ export const MontshList = ({
                 ? 'dropdown-list-is-open'
                 : ''}`}
         >
-            {months &&
-                months.map((month, index) =>
-                    <li
-                        className={`${moment(date).month() === index
-                            ? 'active-item'
-                            : ''}`}
-                        key={month}
-                        onClick={() => onChange(index)}
-                    >
-                        {month}
-                    </li>,
-                )}
+            {moment.months().map((month, index) =>
+                <li
+                    className={`${moment(date).month() === index
+                        ? 'active-item'
+                        : ''}`}
+                    key={month}
+                    onClick={() => onChange(index)}
+                >
+                    {month}
+                </li>,
+            )}
         </ul>
     );
 };

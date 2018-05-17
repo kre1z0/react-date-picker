@@ -31,8 +31,11 @@
     justify-content: center;
     flex-direction: column;
     .root-container {
+      padding: 20px;
+      flex-wrap: wrap;
       display: flex;
       .group {
+        margin-bottom: 10px;
         margin-right: 10px;
         display: flex;
         flex-direction: column;
@@ -44,14 +47,21 @@
         &:last-child {
           margin-right: 0;
         }
+        .range {
+          display: flex;
+          width: 100%;
+          .datePicker-container:first-child {
+            margin-right: 10px;
+          }
+        }
       }
     }
 
     .button-group {
+      text-align: center;
       border-top: 1px dashed #8c8c8c;
-      padding-top: 14px;
-      margin-top: 22px;
-      padding-left: 34px;
+      padding: 14px 20px 20px 34px;
+      margin: 22px 20px 0 20px;
       .button {
         font-size: 12px;
         height: 24px;

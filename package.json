@@ -12,6 +12,7 @@
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-imask": "^3.3.0",
     "react-tap-event-plugin": "^3.0.2",
     "react-text-mask": "^5.4.1",
     "react-transition-group": "^2.2.1",
