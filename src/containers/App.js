@@ -9,7 +9,7 @@ class App extends Component {
         withOffsetDate: '2018-08-04T12:55:12+03:00',
         withDisabledOffsetDate: '2018-08-04T18:44:04+03:00',
         startDate: '2018-08-04T14:44:04+03:00',
-        endDate: '2018-08-04T18:44:08+03:00',
+        endDate: '2018-08-24T18:44:08+03:00',
     };
 
     onPickDate = (date, name) => {
@@ -34,6 +34,14 @@ class App extends Component {
                 new Date(2007, 0, 1),
                 new Date(),
             ),
+            startDate: this._randomDate(
+                new Date(2004, 0, 1),
+                new Date(),
+            ),
+            endDate: this._randomDate(
+                new Date(2008, 0, 1),
+                new Date(),
+            ),
         });
     };
 
@@ -43,6 +51,8 @@ class App extends Component {
             withOutTime: new Date(),
             withOffsetDate: new Date(),
             withDisabledOffsetDate: new Date(),
+            startDate: new Date(),
+            endDate: new Date(),
         });
     };
 
@@ -104,7 +114,10 @@ class App extends Component {
                             {/*/>*/}
                         {/*</div>*/}
                         <div className="group">
-                            <div className="label">
+                            <div
+                                className="label"
+                                style={{ textAlign: 'center' }}
+                            >
                                 5 - date range
                             </div>
                             <div className="range">
@@ -114,21 +127,16 @@ class App extends Component {
                                     startDate={startDate}
                                     endDate={endDate}
                                     onChange={date =>
-                                        this.onPickDate(
-                                            date,
-                                            'startDate',
-                                        )}
+                                        this.onPickDate(date, 'startDate')}
                                 />
+                                <div className="hyphen">-</div>
                                 <DatePicker
                                     selectsEnd
                                     value={endDate}
                                     startDate={startDate}
                                     endDate={endDate}
                                     onChange={date =>
-                                        this.onPickDate(
-                                            date,
-                                            'endDate',
-                                        )}
+                                        this.onPickDate(date, 'endDate')}
                                 />
                             </div>
                         </div>

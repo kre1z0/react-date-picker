@@ -419,8 +419,8 @@ class DatePicker extends Component {
             if (withTime) {
                 value = new Date(
                     moment(val).startOf('day') +
-                    this._convertFiltersToTime(this.state.time),
-                )
+                        this._convertFiltersToTime(this.state.time),
+                );
             }
 
             const { date } = this._getValues({ value }, { value });
@@ -499,6 +499,10 @@ class DatePicker extends Component {
             containerClassName,
             withOffsetDate,
             disabledOffsetDate,
+            selectsStart,
+            selectsEnd,
+            startDate,
+            endDate,
         } = this.props;
 
         const {
@@ -555,6 +559,10 @@ class DatePicker extends Component {
                             onNext={this.handleNextTime}
                         />
                         <Calendar
+                            selectsStart={selectsStart}
+                            selectsEnd={selectsEnd}
+                            startDate={startDate}
+                            endDate={endDate}
                             withOffsetDate={withOffsetDate}
                             disabledOffsetDate={disabledOffsetDate}
                             value={value}

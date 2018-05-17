@@ -14,6 +14,10 @@ export class Calendar extends Component {
             onChange,
             value,
             disabledOffsetDate,
+            selectsStart,
+            selectsEnd,
+            startDate,
+            endDate,
         } = this.props;
 
         const weekdays = moment.weekdaysShort();

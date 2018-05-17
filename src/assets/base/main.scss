@@ -50,6 +50,10 @@
         .range {
           display: flex;
           width: 100%;
+          align-items: center;
+          .hyphen {
+            padding-right: 10px;
+          }
           .datePicker-container:first-child {
             margin-right: 10px;
           }
