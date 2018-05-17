@@ -65,6 +65,7 @@ class DatePicker extends Component {
         position: this.props.position,
         isOpen: false,
         monthListIsOpen: false,
+        yearsListIsOpen: false,
     };
 
     componentDidMount() {
@@ -128,18 +129,6 @@ class DatePicker extends Component {
             }
         }
     }
-
-    _handleClickOutside = event => {
-        const { isOpen } = this.state;
-        const outside = !this.datePicker.contains(event.target);
-
-        if (this.datePicker && outside && isOpen) {
-            this.setState({
-                isOpen: false,
-            });
-            this._sumbitDate();
-        }
-    };
 
     _onResize = () => {
         const { offsetTop, offsetLeft } = this.state;
@@ -382,7 +371,7 @@ class DatePicker extends Component {
                 if (isEmpty && (index === 0 || index === 1)) {
                     return 1;
                 } else if (index === 2) {
-                    if (Number(withoutUnderscore) < 1975) return 1975;
+                    if (Number(withoutUnderscore) < 2010) return 2010;
                     else return Number(withoutUnderscore);
                 } else {
                     return Number(withoutUnderscore);
@@ -424,7 +413,45 @@ class DatePicker extends Component {
         }
     };
 
-    onYearChange = () => {};
+    _openCalendar = () => this.setState({ isOpen: true });
+
+    openMonthsList = () => this.setState({ monthListIsOpen: true });
+
+    openYearsList = () => this.setState({ yearsListIsOpen: true });
+
+    onRefMonthsList = list => {
+        if (list) this.monthsList = list;
+    };
+
+    _handleClickOutside = event => {
+        const { isOpen } = this.state;
+        const outsideDatePicker = !this.datePicker.contains(event.target);
+        const outsideMonthsList = !this.monthsList.contains(event.target);
+        const outsideYearsList = !this.yearsList.contains(event.target);
+
+        if (this.datePicker && outsideDatePicker && isOpen) {
+            this.setState({
+                isOpen: false,
+            });
+            this._sumbitDate();
+        }
+
+        if (this.monthsList && outsideMonthsList) {
+            this.setState({
+                monthListIsOpen: false,
+            });
+        }
+
+        if (this.yearsList && outsideYearsList) {
+            this.setState({
+                yearsListIsOpen: false,
+            });
+        }
+    };
+
+    onRefYearsList = list => {
+        if (list) this.yearsList = list;
+    };
 
     onMonthChange = monthIndex => {
         const { date } = this.state;
@@ -438,9 +465,19 @@ class DatePicker extends Component {
         });
     };
 
-    _openCalendar = () => this.setState({ isOpen: true });
+    onYearsChange = year => {
+        const { date } = this.state;
 
-    openMontsList = () => this.setState({ monthListIsOpen: true });
+        const month = moment(date).month();
+        const day = moment(date).day();
+
+        const selectedYear = moment(new Date(year, month, day));
+
+        this.setState({
+            date: selectedYear,
+            yearsListIsOpen: false,
+        });
+    };
 
     render() {
         const {
@@ -464,6 +501,7 @@ class DatePicker extends Component {
             position,
             isOpen,
             monthListIsOpen,
+            yearsListIsOpen,
         } = this.state;
 
         const months = moment.months();
@@ -490,14 +528,21 @@ class DatePicker extends Component {
                         }}
                     >
                         <MontshList
+                            onRefMonthsList={this.onRefMonthsList}
                             monthListIsOpen={monthListIsOpen}
                             date={date}
                             months={months}
                             onChange={this.onMonthChange}
                         />
-                        <YearsList />
+                        <YearsList
+                            onRefYearsList={this.onRefYearsList}
+                            yearsListIsOpen={yearsListIsOpen}
+                            date={date}
+                            onChange={this.onYearsChange}
+                        />
                         <Control
-                            openMontsList={this.openMontsList}
+                            openMonthsList={this.openMonthsList}
+                            openYearsList={this.openYearsList}
                             date={date}
                             onPrev={this.handlePrevTime}
                             onNext={this.handleNextTime}

@@ -49,7 +49,7 @@ class App extends Component {
                 <div className="test-container">
                     <div className="root-container">
                         <div className="group">
-                            <div className="label">without time</div>
+                            <div className="label">1 - without time</div>
                             <DatePicker
                                 withTime={false}
                                 value={withTime}
@@ -61,7 +61,7 @@ class App extends Component {
                             />
                         </div>
                         <div className="group">
-                            <div className="label">with time</div>
+                            <div className="label">2 - with time</div>
                             <DatePicker
                                 value={withOutTime}
                                 onChange={date =>
@@ -72,7 +72,7 @@ class App extends Component {
                             />
                         </div>
                         <div className="group">
-                            <div className="label">datepicker with offset date</div>
+                            <div className="label">3 - datepicker with offset date</div>
                             <DatePicker
                                 withOffsetDate
                                 value={withOffsetDate}
@@ -84,7 +84,7 @@ class App extends Component {
                             />
                         </div>
                         <div className="group">
-                            <div className="label">with disabled offset date</div>
+                            <div className="label">4 - with d - witd offset date</div>
                             <DatePicker
                                 withOffsetDate
                                 disabledOffsetDate
