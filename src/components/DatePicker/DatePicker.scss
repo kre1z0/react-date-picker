@@ -235,12 +235,12 @@
         }
         &.selecting-range {
           > span {
-            background-color: yellow;
+            background-color: rgba(161,192,76, 0.4);
           }
         }
         &.in-range {
           > span {
-            background-color: red;
+            background-color: rgba(161,192,76, 0.2);
           }
         }
       }

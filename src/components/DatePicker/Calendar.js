@@ -18,7 +18,6 @@ export class Calendar extends Component {
         this.setState({
             enterDate: date,
         });
-        console.info('--> onMouseEnter', date);
     };
 
     onMouseLeave = () => {
