@@ -13,11 +13,15 @@ export const Control = ({
                 <div className="prev" />
             </div>
             <div className="currentDate">
-                <div className="current-month" onClick={openMonthsList}>
-                    {date.format('MMMM')}
+                <div className="current-month">
+                    <span onClick={openMonthsList}>
+                        {date.format('MMMM')}
+                    </span>
                 </div>
-                <div className="current-year" onClick={openYearsList}>
-                    {date.format('YYYY')}
+                <div className="current-year">
+                    <span onClick={openYearsList}>
+                        {date.format('YYYY')}
+                    </span>
                 </div>
             </div>
             <div className="control-btn-wrapper" onClick={onNext}>

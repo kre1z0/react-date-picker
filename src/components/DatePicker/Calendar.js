@@ -6,6 +6,27 @@ import { Monthday } from './Monthday';
 import { createDateObjects } from './createDateObjects';
 
 export class Calendar extends Component {
+    state = {
+        enterDate: null,
+    };
+
+    onMouseEnter = date => {
+        const { selectsStart, selectsEnd } = this.props;
+
+        if (!selectsStart && !selectsEnd) return;
+
+        this.setState({
+            enterDate: date,
+        });
+        console.info('--> onMouseEnter', date);
+    };
+
+    onMouseLeave = () => {
+        this.setState({
+            enterDate: null,
+        });
+    };
+
     render() {
         const {
             weekOffset,
@@ -18,7 +39,10 @@ export class Calendar extends Component {
             selectsEnd,
             startDate,
             endDate,
+            dateIsValid,
         } = this.props;
+
+        const { enterDate } = this.state;
 
         const weekdays = moment.weekdaysShort();
 
@@ -26,6 +50,7 @@ export class Calendar extends Component {
             <div className="calendar">
                 <Header items={weekdays} />
                 <div
+                    onMouseLeave={this.onMouseLeave}
                     className={`grid ${withOffsetDate
                         ? ''
                         : 'withoutOffsetDate'} ${disabledOffsetDate
@@ -36,8 +61,15 @@ export class Calendar extends Component {
                         return (
                             <Monthday
                                 value={value}
+                                enterDate={enterDate}
                                 weekdays={weekdays}
                                 onChange={onChange}
+                                selectsStart={selectsStart}
+                                selectsEnd={selectsEnd}
+                                startDate={startDate}
+                                endDate={endDate}
+                                dateIsValid={dateIsValid}
+                                onMouseEnter={this.onMouseEnter}
                                 {...item}
                                 key={`${item.date.format()}-${i}`}
                             />

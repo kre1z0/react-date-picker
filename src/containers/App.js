@@ -70,49 +70,49 @@ class App extends Component {
             <div className="app-container">
                 <div className="test-container">
                     <div className="root-container">
-                        {/*<div className="group">*/}
-                            {/*<div className="label">1 - without time</div>*/}
-                            {/*<DatePicker*/}
-                                {/*withTime={false}*/}
-                                {/*value={withTime}*/}
-                                {/*onChange={date =>*/}
-                                    {/*this.onPickDate(date, 'withTime')}*/}
-                            {/*/>*/}
-                        {/*</div>*/}
-                        {/*<div className="group">*/}
-                            {/*<div className="label">2 - with time</div>*/}
-                            {/*<DatePicker*/}
-                                {/*value={withOutTime}*/}
-                                {/*onChange={date =>*/}
-                                    {/*this.onPickDate(date, 'withOutTime')}*/}
-                            {/*/>*/}
-                        {/*</div>*/}
-                        {/*<div className="group">*/}
-                            {/*<div className="label">*/}
-                                {/*3 - datepicker with offset date*/}
-                            {/*</div>*/}
-                            {/*<DatePicker*/}
-                                {/*withOffsetDate*/}
-                                {/*value={withOffsetDate}*/}
-                                {/*onChange={date =>*/}
-                                    {/*this.onPickDate(date, 'withOffsetDate')}*/}
-                            {/*/>*/}
-                        {/*</div>*/}
-                        {/*<div className="group">*/}
-                            {/*<div className="label">*/}
-                                {/*with disabled offset date*/}
-                            {/*</div>*/}
-                            {/*<DatePicker*/}
-                                {/*withOffsetDate*/}
-                                {/*disabledOffsetDate*/}
-                                {/*value={withDisabledOffsetDate}*/}
-                                {/*onChange={date =>*/}
-                                    {/*this.onPickDate(*/}
-                                        {/*date,*/}
-                                        {/*'withDisabledOffsetDate',*/}
-                                    {/*)}*/}
-                            {/*/>*/}
-                        {/*</div>*/}
+                        <div className="group">
+                            <div className="label">1 - without time</div>
+                            <DatePicker
+                                withTime={false}
+                                value={withTime}
+                                onChange={date =>
+                                    this.onPickDate(date, 'withTime')}
+                            />
+                        </div>
+                        <div className="group">
+                            <div className="label">2 - with time</div>
+                            <DatePicker
+                                value={withOutTime}
+                                onChange={date =>
+                                    this.onPickDate(date, 'withOutTime')}
+                            />
+                        </div>
+                        <div className="group">
+                            <div className="label">
+                                3 - datepicker with offset date
+                            </div>
+                            <DatePicker
+                                withOffsetDate
+                                value={withOffsetDate}
+                                onChange={date =>
+                                    this.onPickDate(date, 'withOffsetDate')}
+                            />
+                        </div>
+                        <div className="group">
+                            <div className="label">
+                                with disabled offset date
+                            </div>
+                            <DatePicker
+                                withOffsetDate
+                                disabledOffsetDate
+                                value={withDisabledOffsetDate}
+                                onChange={date =>
+                                    this.onPickDate(
+                                        date,
+                                        'withDisabledOffsetDate',
+                                    )}
+                            />
+                        </div>
                         <div className="group">
                             <div
                                 className="label"
@@ -122,6 +122,7 @@ class App extends Component {
                             </div>
                             <div className="range">
                                 <DatePicker
+                                    withOffsetDate
                                     selectsStart
                                     value={startDate}
                                     startDate={startDate}
@@ -131,6 +132,7 @@ class App extends Component {
                                 />
                                 <div className="hyphen">-</div>
                                 <DatePicker
+                                    withOffsetDate
                                     selectsEnd
                                     value={endDate}
                                     startDate={startDate}

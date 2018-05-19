@@ -132,21 +132,28 @@
     justify-content: space-between;
 
     .current-year, .current-month {
-      cursor: pointer;
-      &:hover {
-        filter: brightness(0.9);
+      > span {
+        cursor: pointer;
+        &:hover {
+          filter: brightness(0.9);
+        }
       }
     }
 
     .currentDate {
+      width: 100%;
       display: flex;
       color: #a1c04c;
       font-size: 16px;
       .current-month {
-        margin-right: 15px;
+        width: 65%;
+        text-align: center;
         &:first-letter {
           text-transform: uppercase;
         }
+      }
+      .current-year {
+        width: 35%;
       }
     }
     .control-btn-wrapper {
@@ -195,8 +202,11 @@
       flex-wrap: wrap;
       display: flex;
       .monthday {
-        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-size: 14px;
+        height: 30px;
         > span {
           display: flex;
           align-items: center;
@@ -209,15 +219,28 @@
             background-color: #eef1f5;
           }
         }
-        &.currentDay {
+        &.selectedDay {
           > span {
             color: #fff;
             background-color: #a1c04c;
+            &:hover {
+              background-color: #88a74b;
+            }
           }
           &.nextMonthDay, &.prevMonthDay {
             > span {
               background-color: rgba(161,192,76, 0.4);
             }
+          }
+        }
+        &.selecting-range {
+          > span {
+            background-color: yellow;
+          }
+        }
+        &.in-range {
+          > span {
+            background-color: red;
           }
         }
       }

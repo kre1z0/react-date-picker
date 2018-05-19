@@ -53,11 +53,11 @@ class DatePicker extends Component {
             PropTypes.string,
             PropTypes.object,
         ]),
+        onPickClose: PropTypes.bool,
     };
 
     static defaultProps = {
         value: moment(),
-        onlyCurrentMonthDay: true,
         weekOffset: 0,
         onChange: null,
         withTime: true,
@@ -65,6 +65,7 @@ class DatePicker extends Component {
         height: 32,
         withOffsetDate: false,
         disabledOffsetDate: false,
+        onPickClose: false,
     };
 
     state = {
@@ -94,7 +95,7 @@ class DatePicker extends Component {
         document.addEventListener('keydown', this._onKeyDown);
         this._onResize();
 
-        if (this._dateIsValid(value)) {
+        if (this.dateIsValid(value)) {
             this.setState({
                 error: false,
                 time: this._convertTimeToFilter(
@@ -120,38 +121,42 @@ class DatePicker extends Component {
         document.removeEventListener('keydown', this._onKeyDown);
     }
 
-    _getValues = ({ value }, { value: nextValue }) => {
-        const { selectsStart, selectsEnd, endDate, startDate } = this.props;
+    shouldComponentUpdate(nextProps, nextState) {
+        const {
+            value,
+            position,
+            withTime,
+            weekOffset,
+        } = this.props;
 
-        let date = moment(nextValue);
-        let inputValue = this._getFormattedDate(nextValue);
-        let time = this._convertTimeToFilter(
-            moment(nextValue) - moment(nextValue).startOf('day'),
-        );
-
-        if (selectsStart && moment(nextValue) > moment(endDate)) {
-            date = moment(endDate);
-            inputValue = this._getFormattedDate(endDate);
-            time = this._convertTimeToFilter(
-                moment(endDate) - moment(endDate).startOf('day'),
-            );
-        } else if (selectsEnd && moment(nextValue) < moment(startDate)) {
-            date = moment(startDate);
-            inputValue = this._getFormattedDate(startDate);
-            time = this._convertTimeToFilter(
-                moment(startDate) - moment(startDate).startOf('day'),
-            );
-        }
-
-        return {
-            date,
+        const {
             inputValue,
-            time,
-        };
-    };
+            isOpen,
+            monthListIsOpen,
+            yearsListIsOpen,
+            offsetTop,
+            offsetLeft,
+            date,
+        } = this.state;
+
+        return (
+            weekOffset !== nextProps.weekOffset ||
+            withTime !== nextProps.withTime ||
+            moment(value).valueOf() !== moment(nextProps.value).valueOf() ||
+            position !== nextProps.position ||
+            inputValue !== nextState.inputValue ||
+            isOpen !== nextState.isOpen ||
+            monthListIsOpen !== nextState.monthListIsOpen ||
+            yearsListIsOpen !== nextState.yearsListIsOpen ||
+            offsetTop !== nextState.offsetTop ||
+            offsetLeft !== nextState.offsetLeft ||
+            moment(date).valueOf() !== moment(nextState.date).valueOf() ||
+            this.state.position !== nextState.position
+        );
+    }
 
     componentWillReceiveProps(nextProps) {
-        const { value, position, withTime } = this.props;
+        const { value, position, withTime, selectsEnd } = this.props;
 
         if (position !== nextProps.position) {
             this.setState({
@@ -159,11 +164,23 @@ class DatePicker extends Component {
             });
         }
 
-        if (value !== nextProps.value) {
-            const { date, inputValue, time } = this._getValues(
-                this.props,
-                nextProps,
-            );
+        if (moment(value).valueOf() !== moment(nextProps.value).valueOf()) {
+            const { date, inputValue, time } = this._getValues(nextProps.value);
+
+            if (withTime) {
+                this.setState({
+                    date,
+                    inputValue,
+                    time,
+                });
+            } else {
+                this.setState({
+                    date,
+                    inputValue,
+                });
+            }
+        } else if (selectsEnd && moment(nextProps.startDate) > moment(value)) {
+            const { date, inputValue, time } = this._getValues(nextProps.startDate);
 
             if (withTime) {
                 this.setState({
@@ -179,6 +196,20 @@ class DatePicker extends Component {
             }
         }
     }
+
+    _getValues = value => {
+        const date = moment(value);
+        const inputValue = this._getFormattedDate(value);
+        const time = this._convertTimeToFilter(
+            moment(value) - moment(value).startOf('day'),
+        );
+
+        return {
+            date,
+            inputValue,
+            time,
+        };
+    };
 
     _onResize = () => {
         const { offsetTop, offsetLeft } = this.state;
@@ -290,7 +321,7 @@ class DatePicker extends Component {
         });
     };
 
-    _dateIsValid = date => moment(date).isValid();
+    dateIsValid = date => moment(date).isValid();
 
     _onKeyDown = e => {
         const esc = e.which === 27;
@@ -340,7 +371,7 @@ class DatePicker extends Component {
 
         const { time, inputValue } = this.state;
 
-        const { 0: inputDate, 1: inputTime } = inputValue.split(' ');
+        const [inputDate, inputTime] = inputValue.split(' ');
         const t = inputTime.split(':');
 
         const index = Object.keys(time).findIndex(k => k === key);
@@ -355,7 +386,7 @@ class DatePicker extends Component {
     };
 
     _handleClickOutside = event => {
-        const { isOpen } = this.state;
+        const { isOpen, monthListIsOpen, yearsListIsOpen } = this.state;
         const outsideDatePicker = !this.datePicker.contains(event.target);
         const outsideMonthsList = !this.monthsList.contains(event.target);
         const outsideYearsList = !this.yearsList.contains(event.target);
@@ -367,13 +398,13 @@ class DatePicker extends Component {
             this._sumbitDate();
         }
 
-        if (this.monthsList && outsideMonthsList) {
+        if (this.monthsList && outsideMonthsList && monthListIsOpen) {
             this.setState({
                 monthListIsOpen: false,
             });
         }
 
-        if (this.yearsList && outsideYearsList) {
+        if (this.yearsList && outsideYearsList && yearsListIsOpen) {
             this.setState({
                 yearsListIsOpen: false,
             });
@@ -407,9 +438,9 @@ class DatePicker extends Component {
     };
 
     onPickDate = val => {
-        const { onChange, withTime } = this.props;
+        const { onChange, withTime, onPickClose } = this.props;
 
-        if (this._dateIsValid(val)) {
+        if (this.dateIsValid(val)) {
             this.setState({
                 error: false,
             });
@@ -423,16 +454,19 @@ class DatePicker extends Component {
                 );
             }
 
-            const { date } = this._getValues({ value }, { value });
+            const { date } = this._getValues(value);
             onChange && onChange(new Date(date));
         } else {
             this.setState({
                 error: true,
             });
         }
-        this.setState({
-            isOpen: false,
-        });
+
+        if (onPickClose) {
+            this.setState({
+                isOpen: false,
+            });
+        }
     };
 
     _sumbitDate = () => {
@@ -447,7 +481,7 @@ class DatePicker extends Component {
         }
 
         const underscore = /[_]/g;
-        const { 0: day, 1: month, 2: year } = inputValue
+        const [day, month, year] = inputValue
             .split(' ')[0]
             .split('.')
             .map(s => s.replace(underscore, ''));
@@ -455,14 +489,14 @@ class DatePicker extends Component {
         const newMonth = Number(month - 1);
 
         if (withTime) {
-            const { 0: hour, 1: minute, 2: second } = inputValue
+            const [hour, minute, second] = inputValue
                 .split(' ')[1]
                 .split(':')
                 .map(s => s.replace(underscore, ''));
 
             const date = new Date(year, newMonth, day, hour, minute, second);
 
-            if (this._dateIsValid(date)) {
+            if (this.dateIsValid(date)) {
                 onChange && onChange(date);
 
                 this.setState({
@@ -475,7 +509,7 @@ class DatePicker extends Component {
             }
         } else {
             const date = new Date(year, newMonth, day);
-            if (this._dateIsValid(date)) {
+            if (this.dateIsValid(date)) {
                 onChange && onChange(date);
                 this.setState({
                     error: false,
@@ -530,7 +564,7 @@ class DatePicker extends Component {
                         ref={input => this.onRefDatePicker(input)}
                         className={`datePicker ${className ? className : ''}`}
                         style={{
-                            height: withTime ? 306 : 248,
+                            height: withTime ? 324 : 266,
                             visibility: isOpen ? 'visible' : 'hidden',
                             top: offsetTop,
                             left: offsetLeft,
@@ -567,6 +601,7 @@ class DatePicker extends Component {
                             disabledOffsetDate={disabledOffsetDate}
                             value={value}
                             weekOffset={weekOffset}
+                            dateIsValid={this.dateIsValid}
                             onChange={this.onPickDate}
                             date={date}
                         />
