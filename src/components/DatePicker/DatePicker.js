@@ -11,7 +11,7 @@ import { Control } from './Control';
 import { Calendar } from './Calendar';
 import { Time } from './Time';
 
-import './DatePicker.less';
+import './DatePicker.scss';
 
 const TIME_LIMIT = {
     h: 23,
