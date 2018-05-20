@@ -11,7 +11,7 @@ import { Control } from './Control';
 import { Calendar } from './Calendar';
 import { Time } from './Time';
 
-import './DatePicker.scss';
+import './DatePicker.less';
 
 const TIME_LIMIT = {
     h: 23,
@@ -122,12 +122,7 @@ class DatePicker extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const {
-            value,
-            position,
-            withTime,
-            weekOffset,
-        } = this.props;
+        const { value, position, withTime, weekOffset } = this.props;
 
         const {
             inputValue,
@@ -180,7 +175,9 @@ class DatePicker extends Component {
                 });
             }
         } else if (selectsEnd && moment(nextProps.startDate) > moment(value)) {
-            const { date, inputValue, time } = this._getValues(nextProps.startDate);
+            const { date, inputValue, time } = this._getValues(
+                nextProps.startDate,
+            );
 
             if (withTime) {
                 this.setState({
@@ -214,8 +211,7 @@ class DatePicker extends Component {
     _onResize = () => {
         const { offsetTop, offsetLeft } = this.state;
         const container = this.container;
-        const top = container.offsetTop;
-        const left = container.offsetLeft;
+        const { top, left } = container.getBoundingClientRect();
         const datePickerHeight = this.datePicker.offsetHeight;
 
         if (offsetTop !== top || offsetLeft !== left) {
@@ -258,7 +254,10 @@ class DatePicker extends Component {
         if (list) this.yearsList = list;
     };
 
-    _openCalendar = () => this.setState({ isOpen: true });
+    _openCalendar = () => {
+        this._onResize();
+        this.setState({ isOpen: true })
+    };
 
     openMonthsList = () => {
         const { date } = this.state;
@@ -450,7 +449,7 @@ class DatePicker extends Component {
             if (withTime) {
                 value = new Date(
                     moment(val).startOf('day') +
-                        this._convertFiltersToTime(this.state.time),
+                    this._convertFiltersToTime(this.state.time),
                 );
             }
 
@@ -606,10 +605,10 @@ class DatePicker extends Component {
                             date={date}
                         />
                         {withTime &&
-                            <Time
-                                time={time}
-                                onChange={this.onChangeNumberInput}
-                            />}
+                        <Time
+                            time={time}
+                            onChange={this.onChangeNumberInput}
+                        />}
                     </div>
                 </CalendarPortal>
                 <IMaskInput
@@ -636,9 +635,9 @@ class DatePicker extends Component {
                     onClick={this._openCalendar}
                 />
                 {error &&
-                    <div className="datePicker-error">
-                        неверный формат даты
-                    </div>}
+                <div className="datePicker-error">
+                    неверный формат даты
+                </div>}
             </div>
         );
     }
