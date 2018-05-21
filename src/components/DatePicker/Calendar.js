@@ -43,11 +43,11 @@ export class Calendar extends Component {
 
         const { enterDate } = this.state;
 
-        const weekdays = moment.weekdaysShort();
+        const weekdays = moment.weekdaysShort(true);
 
         return (
             <div className="calendar">
-                <Header items={weekdays} />
+                <Header weekdays={weekdays} />
                 <div
                     onMouseLeave={this.onMouseLeave}
                     className={`grid ${withOffsetDate

@@ -1,8 +1,7 @@
 import React from 'react';
-import moment from "moment/moment";
 
-export const Header = () => {
-    const weekdays = moment.weekdaysShort();
+export const Header = ({ weekdays }) => {
+
     return (
         <div className="header">
             {weekdays.map((item, i) => {
