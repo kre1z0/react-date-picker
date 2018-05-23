@@ -3,20 +3,34 @@
   "version": "1.0.0",
   "private": false,
   "homepage": "http://kre1z0.github.io/react-date-picker",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kre1z0/react-date-picker.git"
+  },
+  "description": "React datepicker with time input",
+  "keywords": [
+    "datepicker",
+    "datepicker with time",
+    "input",
+    "react",
+    "momentjs",
+    "es6",
+    "scss"
+  ],
+  "author": {
+    "name": "Igor Ivchuk",
+    "url": "https://github.com/kre1z0"
+  },
+  "license": "MIT",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.5",
     "moment": "^2.20.1",
-    "numeral": "^2.0.6",
     "postcss-flexbugs-fixes": "^3.2.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-imask": "^3.3.0",
-    "react-tap-event-plugin": "^3.0.2",
-    "react-text-mask": "^5.4.1",
-    "react-transition-group": "^2.2.1",
-    "reset.css": "^2.0.2"
+    "react-imask": "^3.3.0"
   },
   "devDependencies": {
     "autoprefixer": "7.1.0",
@@ -64,7 +78,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "auto-build": "yarn && yarn run build",
+    "auto-build": "npm && npm run build",
     "deploy": "gh-pages -d build"
   },
   "babel": {

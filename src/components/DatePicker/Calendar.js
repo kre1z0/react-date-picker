@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import cn from 'classnames';
 import moment from 'moment';
 
 import { Header } from './Header';
@@ -50,11 +51,10 @@ export class Calendar extends Component {
                 <Header weekdays={weekdays} />
                 <div
                     onMouseLeave={this.onMouseLeave}
-                    className={`grid ${withOffsetDate
-                        ? ''
-                        : 'withoutOffsetDate'} ${disabledOffsetDate
-                        ? 'disabledOffsetDate'
-                        : ''}`}
+                    className={cn('grid', {
+                        ['withoutOffsetDate']: !withOffsetDate,
+                        ['disabledOffsetDate']: disabledOffsetDate,
+                    })}
                 >
                     {createDateObjects(date, weekOffset).map((item, i) => {
                         return (

@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 import moment from 'moment/moment';
 
 const getYearsList = date => {
@@ -22,17 +23,17 @@ export const YearsList = ({
 
     return (
         <ul
-            ref={elem => onRefYearsList(elem)}
-            className={`datapicker-dropdown-list years-list ${yearsListIsOpen
-                ? 'dropdown-list-is-open'
-                : ''}`}
+            ref={onRefYearsList}
+            className={cn('datapicker-dropdown-list years-list', {
+                'dropdown-list-is-open': yearsListIsOpen,
+            })}
         >
             {years &&
                 years.map(year =>
                     <li
-                        className={`${moment(date).year() === year
-                            ? 'active-item'
-                            : ''}`}
+                        className={cn({
+                            'active-item': moment(date).year() === year,
+                        })}
                         key={year}
                         onClick={() => onChange(year)}
                     >

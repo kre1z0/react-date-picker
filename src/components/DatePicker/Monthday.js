@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import cn from 'classnames';
 import moment from 'moment';
 
 export class Monthday extends Component {
@@ -68,9 +69,7 @@ export class Monthday extends Component {
 
         return (
             <div
-                className={`monthday ${this.getSelectedDay()
-                    ? this.getSelectedDay()
-                    : ''} ${classNames ? classNames : ''}`}
+                className={cn('monthday', this.getSelectedDay(), classNames)}
                 style={{
                     width: `calc(100% / ${weekdays.length})`,
                 }}

@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
+import cn from 'classnames';
 import { IMaskInput } from 'react-imask';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import 'moment/locale/ru';
 
-import { CalendarPortal } from './CalendarPortal';
 import { MontshList } from './MonthsList';
 import { YearsList } from './YearsList';
 import { Control } from './Control';
 import { Calendar } from './Calendar';
+import { Portal } from './Portal';
 import { Time } from './Time';
 
 import './DatePicker.scss';
@@ -110,9 +111,7 @@ class DatePicker extends Component {
             });
         }
 
-        setTimeout(() => {
-            this._onResize();
-        }, 444);
+        this._onResize();
     }
 
     componentWillUnmount() {
@@ -236,6 +235,10 @@ class DatePicker extends Component {
         if (elem) this.datePicker = elem;
     };
 
+    onRefButton = elem => {
+        if (elem) this.button = elem;
+    };
+
     onRefMonthsList = list => {
         if (list) this.monthsList = list;
     };
@@ -254,9 +257,10 @@ class DatePicker extends Component {
         if (list) this.yearsList = list;
     };
 
-    _openCalendar = () => {
+    _onToggleCalendar = () => {
+        const { isOpen } = this.state;
         this._onResize();
-        this.setState({ isOpen: true })
+        this.setState({ isOpen: !isOpen });
     };
 
     openMonthsList = () => {
@@ -389,11 +393,10 @@ class DatePicker extends Component {
         const outsideDatePicker = !this.datePicker.contains(event.target);
         const outsideMonthsList = !this.monthsList.contains(event.target);
         const outsideYearsList = !this.yearsList.contains(event.target);
+        const isButton = this.button.contains(event.target);
 
-        if (this.datePicker && outsideDatePicker && isOpen) {
-            this.setState({
-                isOpen: false,
-            });
+        if (this.datePicker && outsideDatePicker && isOpen && !isButton) {
+            this._onToggleCalendar();
             this._sumbitDate();
         }
 
@@ -449,7 +452,7 @@ class DatePicker extends Component {
             if (withTime) {
                 value = new Date(
                     moment(val).startOf('day') +
-                    this._convertFiltersToTime(this.state.time),
+                        this._convertFiltersToTime(this.state.time),
                 );
             }
 
@@ -553,15 +556,15 @@ class DatePicker extends Component {
 
         return (
             <div
-                className={`datePicker-container ${containerClassName
-                    ? containerClassName
-                    : ''} ${withTime ? 'withTime' : ''} `}
-                ref={input => this.onRefContainer(input)}
+                className={cn('datePicker-container', containerClassName, {
+                    withTime,
+                })}
+                ref={this.onRefContainer}
             >
-                <CalendarPortal>
+                <Portal>
                     <div
-                        ref={input => this.onRefDatePicker(input)}
-                        className={`datePicker ${className ? className : ''}`}
+                        ref={this.onRefDatePicker}
+                        className={cn('datePicker', className)}
                         style={{
                             height: withTime ? 324 : 266,
                             visibility: isOpen ? 'visible' : 'hidden',
@@ -605,12 +608,12 @@ class DatePicker extends Component {
                             date={date}
                         />
                         {withTime &&
-                        <Time
-                            time={time}
-                            onChange={this.onChangeNumberInput}
-                        />}
+                            <Time
+                                time={time}
+                                onChange={this.onChangeNumberInput}
+                            />}
                     </div>
-                </CalendarPortal>
+                </Portal>
                 <IMaskInput
                     mask={withTime ? dateFormatWithTime : dateFormat}
                     lazy={false}
@@ -623,21 +626,22 @@ class DatePicker extends Component {
                         ss: new IMask.MaskedPattern.Group.Range([0, 59]),
                     }}
                     style={{ height }}
-                    ref={input => this.onRefInput(input)}
+                    ref={this.onRefInput}
                     value={inputValue}
-                    className={`date-picker-control ${error ? 'error' : ''}`}
+                    className={cn('date-picker-control', { error })}
                     placeholder={this.getPlaceHolder()}
                     onBlur={this._sumbitDate}
                     onAccept={this.onChangeInput}
                 />
                 <button
-                    className={`toggle-button ${isOpen ? 'isOpen' : ''}`}
-                    onClick={this._openCalendar}
+                    ref={this.onRefButton}
+                    className={cn('toggle-button', { isOpen })}
+                    onClick={this._onToggleCalendar}
                 />
                 {error &&
-                <div className="datePicker-error">
-                    неверный формат даты
-                </div>}
+                    <div className="datePicker-error">
+                        неверный формат даты
+                    </div>}
             </div>
         );
     }
