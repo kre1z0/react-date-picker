@@ -49,6 +49,7 @@
   height: 32px;
   border: solid 1px #e1e3e6;
   border-radius: 2px;
+  transition: border-color 0.4s ease;
   &::-ms-clear {
     display: none;
   }
