@@ -15,21 +15,20 @@
   }
 
   .toggle-button {
+    box-sizing: content-box;
     cursor: pointer;
     padding: 0;
     width: 15px;
     height: 16px;
-    border: none;
-    top: 50%;
-    transform: translateY(-50%);
+    border: 8px solid transparent;
     position: absolute;
-    right: 10px;
-    background: url(./img/calendar_icon.svg);
+    right: 0;
+    background: url(./img/calendar_icon.svg) no-repeat;
     &:hover {
       filter: brightness(0.9);
     }
     &.isOpen {
-      background: url(./img/calendar_icon_active.svg);
+      background: url(./img/calendar_icon_active.svg) no-repeat;
     }
   }
 
@@ -85,6 +84,7 @@
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
     height: 0;
     transition: height .2s ease;
+    pointer-events: none;
     &.months-list {
       left: 40px;
     }
@@ -93,6 +93,7 @@
       right: 4px;
     }
     &.dropdown-list-is-open {
+      pointer-events: auto;
       height: 260px;
     }
     > li {

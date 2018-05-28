@@ -34,19 +34,27 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    @media (max-width: 440px) {
+      flex-direction: row;
+      justify-content: flex-start;
+    }
     .root-container {
       padding: 20px;
       flex-wrap: wrap;
       display: flex;
+      @media (max-width: 440px) {
+        display: block;
+        padding: 14px 24px 4px 24px;
+      }
       .group {
         margin-bottom: 10px;
         margin-right: 10px;
         display: flex;
         flex-direction: column;
         .label {
-          font-size: 12px;
-          padding-bottom: 5px;
-          color: #777777;
+          font-size: 11px;
+          padding-bottom: 4px;
+          color: #9c9c9c;
         }
         &:last-child {
           margin-right: 0;
@@ -61,6 +69,23 @@
           .datePicker-container:first-child {
             margin-right: 10px;
           }
+          @media (max-width: 440px) {
+            flex-wrap: wrap;
+            .hyphen {
+              display: none;
+            }
+            .datePicker-container:first-child {
+              margin-bottom: 10px;
+            }
+          }
+        }
+        &:last-child {
+          .label {
+            text-align: center;
+            @media (max-width: 440px) {
+              text-align: left;
+            }
+          }
         }
       }
     }
@@ -70,6 +95,10 @@
       border-top: 1px dashed #8c8c8c;
       padding: 14px 20px 20px 34px;
       margin: 22px 20px 0 20px;
+      @media (max-width: 440px) {
+        padding: 10px 10px 20px 10px;
+        margin: 10px 0 0 0;
+      }
       .button {
         font-size: 12px;
         height: 24px;
@@ -102,6 +131,11 @@
     right: 44px;
     font-size: 14px;
     padding: 5px 10px;
+    @media (max-width: 440px) {
+      font-size: 13px;
+      bottom: 5px;
+      right: 5px;
+    }
   }
 
   a,

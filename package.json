@@ -22,14 +22,16 @@
     "url": "https://github.com/kre1z0"
   },
   "license": "MIT",
+  "peerDependencies": {
+    "react": ">=16.0.0",
+    "react-dom": ">=16.0.0"
+  },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.5",
     "moment": "^2.20.1",
     "postcss-flexbugs-fixes": "^3.2.0",
     "prop-types": "^15.6.0",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
     "react-imask": "^3.3.0"
   },
   "devDependencies": {
@@ -63,7 +65,9 @@
     "postcss-flexbugs-fixes": "3.3.1",
     "postcss-loader": "2.0.5",
     "promise": "7.1.1",
+    "react": "^16.3.2",
     "react-dev-utils": "^1.0.0",
+    "react-dom": "^16.3.2",
     "react-error-overlay": "^1.0.0",
     "react-hot-loader": "next",
     "redux-logger": "^3.0.6",

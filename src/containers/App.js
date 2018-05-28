@@ -34,14 +34,8 @@ class App extends Component {
                 new Date(2007, 0, 1),
                 new Date(),
             ),
-            startDate: this._randomDate(
-                new Date(2004, 0, 1),
-                new Date(),
-            ),
-            endDate: this._randomDate(
-                new Date(2008, 0, 1),
-                new Date(),
-            ),
+            startDate: this._randomDate(new Date(2004, 0, 1), new Date()),
+            endDate: this._randomDate(new Date(2008, 0, 1), new Date()),
         });
     };
 
@@ -71,7 +65,7 @@ class App extends Component {
                 <div className="test-container">
                     <div className="root-container">
                         <div className="group">
-                            <div className="label">1 - without time</div>
+                            <div className="label">1) without time</div>
                             <DatePicker
                                 withTime={false}
                                 value={withTime}
@@ -80,7 +74,7 @@ class App extends Component {
                             />
                         </div>
                         <div className="group">
-                            <div className="label">2 - with time</div>
+                            <div className="label">2) with time</div>
                             <DatePicker
                                 value={withOutTime}
                                 onChange={date =>
@@ -89,7 +83,7 @@ class App extends Component {
                         </div>
                         <div className="group">
                             <div className="label">
-                                3 - datepicker with offset date
+                                3) datepicker with offset date
                             </div>
                             <DatePicker
                                 withOffsetDate
@@ -100,7 +94,7 @@ class App extends Component {
                         </div>
                         <div className="group">
                             <div className="label">
-                                with disabled offset date
+                                4) with disabled offset date
                             </div>
                             <DatePicker
                                 withOffsetDate
@@ -114,12 +108,7 @@ class App extends Component {
                             />
                         </div>
                         <div className="group">
-                            <div
-                                className="label"
-                                style={{ textAlign: 'center' }}
-                            >
-                                5 - date range
-                            </div>
+                            <div className="label">5) date range</div>
                             <div className="range">
                                 <DatePicker
                                     withOffsetDate
