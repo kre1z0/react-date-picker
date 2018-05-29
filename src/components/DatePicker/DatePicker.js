@@ -91,15 +91,12 @@ class DatePicker extends Component {
         const { time } = this.state;
 
         moment.locale('ru');
+
         window.addEventListener('resize', this._onResize);
-
-        if (typeof window.orientation !== 'undefined') {
-            document.addEventListener('touchend', this._handleClickOutside);
-        } else {
-            document.addEventListener('mousedown', this._handleClickOutside);
-        }
-
+        document.addEventListener('touchend', this._handleClickOutside);
+        document.addEventListener('mousedown', this._handleClickOutside);
         document.addEventListener('keydown', this._onKeyDown);
+
         this._onResize();
 
         if (this.dateIsValid(value)) {
@@ -122,11 +119,8 @@ class DatePicker extends Component {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this._onResize);
-        if (typeof window.orientation !== 'undefined') {
-            document.removeEventListener('touchend', this._handleClickOutside);
-        } else {
-            document.removeEventListener('mousedown', this._handleClickOutside);
-        }
+        document.removeEventListener('mousedown', this._handleClickOutside);
+        document.removeEventListener('touchend', this._handleClickOutside);
         document.removeEventListener('keydown', this._onKeyDown);
     }
 
