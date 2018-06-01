@@ -95,7 +95,6 @@ class DatePicker extends Component {
         window.addEventListener('resize', this._onResize);
         document.addEventListener('touchend', this._handleClickOutside);
         document.addEventListener('mousedown', this._handleClickOutside);
-        document.addEventListener('keydown', this._onKeyDown);
 
         this._onResize();
 
@@ -121,7 +120,6 @@ class DatePicker extends Component {
         window.removeEventListener('resize', this._onResize);
         document.removeEventListener('mousedown', this._handleClickOutside);
         document.removeEventListener('touchend', this._handleClickOutside);
-        document.removeEventListener('keydown', this._onKeyDown);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -339,7 +337,6 @@ class DatePicker extends Component {
                 isOpen: false,
             });
             this.input.element.blur();
-            this._sumbitDate();
         }
     };
 
@@ -516,7 +513,6 @@ class DatePicker extends Component {
         } else {
             const date = new Date(year, newMonth, day);
             if (this.dateIsValid(date)) {
-                onChange && onChange(date);
                 this.setState({
                     error: false,
                 });
@@ -635,6 +631,7 @@ class DatePicker extends Component {
                     className={cn('date-picker-control', { error })}
                     placeholder={this.getPlaceHolder()}
                     onBlur={this._sumbitDate}
+                    onKeyDown={this._onKeyDown}
                     onAccept={this.onChangeInput}
                 />
                 <button
