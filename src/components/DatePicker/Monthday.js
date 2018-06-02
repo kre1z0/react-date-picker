@@ -18,7 +18,7 @@ export class Monthday extends Component {
         const val = moment(value).startOf('day');
         const start = moment(startDate).startOf('day');
         const end = moment(endDate).startOf('day');
-        const enter = moment(enterDate);
+        const enter = moment(enterDate).startOf('day');
 
         const valid = dateIsValid(enter);
         const isSelectsStart = selectsStart && valid;
