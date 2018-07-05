@@ -25,3 +25,5 @@ storybook-static
 
 .env.*
 
+/nbproject/*
+yarn.lock
