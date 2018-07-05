@@ -4,7 +4,7 @@ export function createDateObjects(date, weekOffset) {
     const startOfMonth = date.startOf('month');
 
     let diff = startOfMonth.weekday() - weekOffset;
-    if (diff < 0) diff += 7;
+    if (diff < 0) diff += 14;
 
     const prevMonthDays = [];
     for (let i = 0; i < diff; i++) {
@@ -25,7 +25,7 @@ export function createDateObjects(date, weekOffset) {
 
     const nextMonthDays = [];
     let i = 1;
-    while ((daysAdded + i) % 7 !== 0) {
+    while ((daysAdded + i) % 14 !== 0) {
         nextMonthDays.push({
             date: currentMonthDays[currentMonthDays.length - 1].date
                 .clone()
