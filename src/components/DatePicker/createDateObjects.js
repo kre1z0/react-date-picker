@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from "moment";
 
 export function createDateObjects(date, weekOffset) {
     const startOfMonth = date.startOf('month');

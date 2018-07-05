@@ -2,7 +2,6 @@
   "name": "react-date-picker",
   "version": "1.0.0",
   "private": false,
-  "homepage": "http://kre1z0.github.io/react-date-picker",
   "repository": {
     "type": "git",
     "url": "https://github.com/kre1z0/react-date-picker.git"
@@ -29,6 +28,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "classnames": "^2.2.5",
+    "imask": "^3.4.0",
     "moment": "^2.20.1",
     "postcss-flexbugs-fixes": "^3.2.0",
     "prop-types": "^15.6.0",
@@ -48,10 +48,12 @@
     "css-loader": "0.28.1",
     "dotenv": "4.0.0",
     "eslint": "3.19.0",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-config-react-app": "^1.0.0",
     "eslint-loader": "1.7.1",
     "eslint-plugin-flowtype": "2.33.0",
     "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-jsx-a11y": "5.0.1",
     "eslint-plugin-react": "7.0.1",
     "extract-text-webpack-plugin": "2.1.0",
@@ -64,6 +66,7 @@
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.3.1",
     "postcss-loader": "2.0.5",
+    "prettier": "^1.13.5",
     "promise": "7.1.1",
     "react": "^16.3.2",
     "react-dev-utils": "^1.0.0",
@@ -89,5 +92,27 @@
     "presets": [
       "react-app"
     ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "prettier",
+      "prettier/flowtype",
+      "prettier/react"
+    ],
+    "plugins": [
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "printWidth": 100,
+          "tabWidth": 2,
+          "singleQuote": false,
+          "trailingComma": "all"
+        }
+      ]
+    }
   }
 }
